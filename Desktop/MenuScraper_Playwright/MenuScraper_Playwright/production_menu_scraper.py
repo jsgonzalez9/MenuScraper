@@ -171,7 +171,9 @@ class ProductionMenuScraper:
             'allergen_summary': {},
             'price_coverage': 0,
             'error': None,
-            'scraped_source': 'primary_url' # Indicates if data is from primary or official_site
+            'scraped_source': 'primary_url', # Indicates if data is from primary or official_site
+            'menu_image_urls': [],
+            'ocr_texts': []
         }
 
         # Attempt 1: Scrape the provided URL
@@ -183,7 +185,9 @@ class ProductionMenuScraper:
             'items': primary_scrape_result['items'],
             'total_items': primary_scrape_result['total_items'],
             'extraction_method': primary_scrape_result['extraction_method'],
-            'error': primary_scrape_result['error']
+            'error': primary_scrape_result['error'],
+            'menu_image_urls': primary_scrape_result.get('menu_image_urls', []),
+            'ocr_texts': primary_scrape_result.get('ocr_texts', [])
         })
 
         # Condition to try official website: primary scrape not very successful AND name is provided
@@ -212,10 +216,12 @@ class ProductionMenuScraper:
                         'extraction_method': official_scrape_result['extraction_method'],
                         'error': official_scrape_result['error'], # Could be None if successful
                         'scraped_source': 'official_site',
-                        'url': official_site_url # Update URL to the one actually scraped
+                        'url': official_site_url, # Update URL to the one actually scraped
+                        'menu_image_urls': official_scrape_result.get('menu_image_urls', []), # Capture images from official site
+                        'ocr_texts': official_scrape_result.get('ocr_texts', []) # Capture OCR texts from official site
                     })
                 elif official_scrape_result['success']:
-                     logger.info(f"Official website scrape was successful but yielded fewer or same items ({official_scrape_result['total_items']}) than primary ({final_result['total_items']}). Keeping primary URL data.")
+                     logger.info(f"Official website scrape was successful but yielded fewer or same items ({official_scrape_result['total_items']}) than primary ({final_result['total_items']}). Keeping primary URL data (including its image URLs and OCR texts if any).")
                 else:
                     logger.warning(f"Official website scrape failed. Keeping primary URL data. Error: {official_scrape_result.get('error')}")
             elif official_site_url == url:
@@ -303,7 +309,9 @@ class ProductionMenuScraper:
             'items': [],
             'total_items': 0,
             'extraction_method': None,
-            'error': None
+            'error': None,
+            'menu_image_urls': [], # To store found image URLs
+            'ocr_texts': [] # To store raw text extracted by OCR from images
             # Note: 'url' and 'processing_time' will be handled by the caller
         }
 
@@ -386,8 +394,38 @@ class ProductionMenuScraper:
                 logger.info(f"Successfully extracted {len(unique_items)} menu items from {url}")
             else:
                 partial_result['error'] = 'No menu items found'
-                logger.warning(f"No menu items extracted from {url}")
-                
+                logger.warning(f"No menu items extracted from {url} using text methods.")
+
+                # If text extraction fails or yields very few items, try to find menu images for OCR
+                if not items or len(items) < 3: # Threshold for trying OCR
+                    logger.info(f"Text extraction yielded {len(items)} items. Attempting to find menu images for potential OCR.")
+                    found_image_urls = await self._find_menu_image_urls()
+                    if found_image_urls:
+                        partial_result['menu_image_urls'] = found_image_urls
+                        # The actual OCR processing will happen later based on these URLs.
+                        # For now, we just note that images were found.
+                        # If OCR were integrated here, we might update 'success' or 'items'.
+                        logger.info(f"Found {len(found_image_urls)} menu image URLs. Attempting OCR on them now.")
+
+                        ocr_extracted_texts = []
+                        for img_url in found_image_urls:
+                            ocr_text = await self._process_image_with_ocr(img_url)
+                            if ocr_text:
+                                ocr_extracted_texts.append({
+                                    "image_url": img_url,
+                                    "text": ocr_text
+                                })
+                        if ocr_extracted_texts:
+                            partial_result['ocr_texts'] = ocr_extracted_texts
+                            logger.info(f"Stored OCR results for {len(ocr_extracted_texts)} images.")
+                            # Potentially, if text-based items are empty, OCR success could make overall success True.
+                            # if not partial_result['items'] and ocr_extracted_texts:
+                            #    partial_result['success'] = True # Mark success if OCR found something
+                            #    partial_result['extraction_method'] = (partial_result['extraction_method'] or "") + "+ocr_images_found"
+
+                    else:
+                        logger.info("No menu image URLs found for OCR.")
+
         except Exception as e:
             partial_result['error'] = str(e)
             logger.error(f"Extraction from {url} failed: {e}")
@@ -659,6 +697,154 @@ class ProductionMenuScraper:
         except Exception as e:
             logger.error(f"Error during Google search for {restaurant_name}: {e}")
             return None
+
+    async def _find_menu_image_urls(self) -> List[str]:
+        """Finds potential menu image URLs on the current page."""
+        if not self.page:
+            logger.warning("Page object not available for finding menu images.")
+            return []
+
+        logger.info("Scanning for potential menu image URLs...")
+        image_urls = []
+
+        # Selectors for menu images based on Menu_Scraping_Improvement_Strategy.md
+        # and common patterns
+        menu_image_selectors = [
+            'img[src*="menu"]', 'img[alt*="menu"]', 'img[class*="menu-image"]', # Direct image attributes
+            'img[data-src*="menu"]', # For lazy-loaded images
+            '.menu-image img', '[data-test*="menu-image"] img', # Images within menu-like containers
+            'a[href*="menu.pdf"] img', 'a[href*="menu_"] img', # Images that are links to menus
+            'img[alt*="food menu"]', 'img[title*="menu"]',
+            # More generic, might need refinement to avoid false positives
+            'div[class*="menu"] img', 'section[class*="menu"] img'
+        ]
+
+        for selector in menu_image_selectors:
+            try:
+                elements = await self.page.query_selector_all(selector)
+                for element in elements:
+                    src = await element.get_attribute('src')
+                    data_src = await element.get_attribute('data-src') # Common for lazy loading
+
+                    img_url = src or data_src # Prioritize data-src if src is placeholder
+
+                    if img_url:
+                        # Resolve relative URLs to absolute
+                        img_url = urljoin(self.page.url, img_url.strip())
+                        if img_url not in image_urls: # Avoid duplicates
+                            # Basic filter for common image types, and avoid tiny icons (heuristic)
+                            if any(ext in img_url.lower() for ext in ['.jpg', '.jpeg', '.png', '.webp', '.gif']):
+                                # Further checks could be image dimensions if accessible easily, but that's more complex here.
+                                logger.info(f"Found potential menu image: {img_url} (via selector: {selector})")
+                                image_urls.append(img_url)
+            except Exception as e:
+                logger.debug(f"Error processing selector '{selector}' for menu images: {e}")
+
+        if not image_urls:
+            logger.info("No specific menu images found with targeted selectors.")
+
+        # As a broader fallback, get a few prominent images if no specific ones are found
+        # This is very heuristic and might grab irrelevant images.
+        if not image_urls:
+            logger.info("Trying to find any prominent images on the page as a last resort for OCR.")
+            all_images = await self.page.query_selector_all('img')
+            for element in all_images[:5]: # Limit to first 5 prominent images
+                src = await element.get_attribute('src')
+                data_src = await element.get_attribute('data-src')
+                img_url = src or data_src
+                if img_url:
+                    img_url = urljoin(self.page.url, img_url.strip())
+                    if img_url not in image_urls and any(ext in img_url.lower() for ext in ['.jpg', '.jpeg', '.png', '.webp']):
+                        # Check if image is reasonably sized (very rough heuristic)
+                        # width = await element.evaluate("el => el.naturalWidth || el.width")
+                        # height = await element.evaluate("el => el.naturalHeight || el.height")
+                        # if width > 200 and height > 200: # Example: skip small icons
+                        logger.info(f"Found generic prominent image: {img_url}")
+                        image_urls.append(img_url)
+
+        logger.info(f"Found {len(image_urls)} potential menu image URLs.")
+        return list(set(image_urls)) # Return unique URLs
+
+    async def _download_image(self, image_url: str) -> Optional[bytes]:
+        """Downloads an image from a URL."""
+        # This helper would ideally use the existing Playwright page/context
+        # to benefit from its session/cookies, or a robust HTTP client.
+        # For simplicity, using requests here. Add 'requests' to requirements if not present.
+        import requests # Ensure this import is at the top of the file if widely used
+        try:
+            # It's better to use self.page.request if possible to maintain session context
+            # response = await self.page.request.get(image_url, timeout=10000)
+            # if response.ok:
+            #     return await response.body()
+            # else:
+            #     logger.warning(f"Failed to download image {image_url} with Playwright: {response.status}")
+            #     return None
+
+            # Fallback to requests for now.
+            # Note: This makes a new request outside Playwright's current browser context.
+            response = requests.get(image_url, timeout=10)
+            response.raise_for_status()
+            return response.content
+        except Exception as e:
+            logger.error(f"Failed to download image {image_url}: {e}")
+            return None
+
+    async def _process_image_with_ocr(self, image_url: str) -> Optional[str]:
+        """
+        Downloads an image and processes it with OCR.
+        Currently a placeholder for actual OCR engine integration and preprocessing.
+        Dependencies like opencv-python, easyocr/pytesseract would be needed.
+        """
+        logger.info(f"Attempting OCR for image: {image_url}")
+        image_bytes = await self._download_image(image_url)
+        if not image_bytes:
+            return None
+
+        extracted_text = None
+
+        # --- Placeholder for Image Preprocessing (using OpenCV) ---
+        # import cv2
+        # import numpy as np
+        # try:
+        #     nparr = np.frombuffer(image_bytes, np.uint8)
+        #     img_np = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+        #     if img_np is None:
+        #         logger.warning(f"Could not decode image for OCR: {image_url}")
+        #         return None
+        #
+        #     gray_image = cv2.cvtColor(img_np, cv2.COLOR_BGR2GRAY)
+        #     # _, binary_image = cv2.threshold(gray_image, 128, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
+        #     # processed_image_bytes = cv2.imencode('.png', binary_image)[1].tobytes()
+        #     # For now, just use gray_image for conceptual pytesseract if it were here
+        #     logger.info(f"Image preprocessed (conceptually) for OCR: {image_url}")
+        #     # image_for_ocr = Image.open(io.BytesIO(processed_image_bytes)) # If using Pillow + Pytesseract
+        # except Exception as e:
+        #     logger.error(f"Error during conceptual image preprocessing for {image_url}: {e}")
+        #     return None
+        # --- End Placeholder for Image Preprocessing ---
+
+        # --- Placeholder for OCR Engine (e.g., EasyOCR) ---
+        # try:
+        #     # Initialize EasyOCR reader (should be done once, e.g., in __init__)
+        #     # if not hasattr(self, 'ocr_reader') or self.ocr_reader is None:
+        #     #     import easyocr
+        #     #     self.ocr_reader = easyocr.Reader(['en']) # Or other languages
+
+        #     # For EasyOCR, it takes the image path or bytes directly
+        #     ocr_results = self.ocr_reader.readtext(image_bytes)
+        #     extracted_text = " ".join([res[1] for res in ocr_results if res[2] > 0.3]) # Example confidence filter
+        #     logger.info(f"OCR extracted text (conceptual) from {image_url}: {extracted_text[:100]}...")
+        # except Exception as e:
+        #     logger.error(f"Error during conceptual OCR processing for {image_url}: {e}")
+        #     # Fallback or failure
+        # --- End Placeholder for OCR Engine ---
+
+        if not extracted_text: # If OCR block is commented out/fails
+             logger.warning(f"OCR processing is currently a placeholder. No text extracted for {image_url}.")
+             # To simulate finding something for testing flow:
+             # extracted_text = f"Simulated OCR text from {image_url}: Item A - $10, Item B - $12"
+
+        return extracted_text
     
     async def cleanup(self):
         """Clean up browser resources"""
