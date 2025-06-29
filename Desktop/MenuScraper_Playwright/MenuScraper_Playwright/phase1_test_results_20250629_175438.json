@@ -1,0 +1,106 @@
+{
+  "test_info": {
+    "timestamp": "2025-06-29T17:54:38.880355",
+    "total_restaurants": 5,
+    "successful_extractions": 1,
+    "failed_extractions": 4,
+    "fallback_usage": 4,
+    "total_processing_time": 371.95662903785706,
+    "average_processing_time": 74.3913258075714
+  },
+  "performance_metrics": {
+    "success_rate": 20.0,
+    "fallback_usage_rate": 80.0,
+    "total_items_extracted": 13,
+    "average_items_per_restaurant": 13.0,
+    "average_price_coverage": 0.0,
+    "average_description_coverage": 0.0
+  },
+  "extraction_methods": {
+    "primary_url": 1
+  },
+  "individual_results": [
+    {
+      "restaurant": "The Cheesecake Factory",
+      "success": false,
+      "total_items": 0,
+      "processing_time": 74.10487294197083,
+      "extraction_method": "combined",
+      "has_fallback": true,
+      "error": "No valid menu items found with enhanced strategies and fallback",
+      "price_coverage": 0,
+      "description_coverage": 0
+    },
+    {
+      "restaurant": "Guelaguetza",
+      "success": true,
+      "total_items": 13,
+      "processing_time": 69.55746293067932,
+      "extraction_method": "primary_url",
+      "has_fallback": false,
+      "error": null,
+      "price_coverage": 0.0,
+      "description_coverage": 0.0
+    },
+    {
+      "restaurant": "Republique",
+      "success": false,
+      "total_items": 0,
+      "processing_time": 72.80023336410522,
+      "extraction_method": "combined",
+      "has_fallback": true,
+      "error": "No valid menu items found with enhanced strategies and fallback",
+      "price_coverage": 0,
+      "description_coverage": 0
+    },
+    {
+      "restaurant": "Night + Market",
+      "success": false,
+      "total_items": 0,
+      "processing_time": 72.75063943862915,
+      "extraction_method": "combined",
+      "has_fallback": true,
+      "error": "No valid menu items found with enhanced strategies and fallback",
+      "price_coverage": 0,
+      "description_coverage": 0
+    },
+    {
+      "restaurant": "Bestia",
+      "success": false,
+      "total_items": 0,
+      "processing_time": 72.69539594650269,
+      "extraction_method": "combined",
+      "has_fallback": true,
+      "error": "No valid menu items found with enhanced strategies and fallback",
+      "price_coverage": 0,
+      "description_coverage": 0
+    }
+  ],
+  "test_restaurants": [
+    {
+      "name": "The Cheesecake Factory",
+      "url": "https://www.yelp.com/biz/the-cheesecake-factory-beverly-hills",
+      "description": "Popular chain restaurant - should have official website fallback"
+    },
+    {
+      "name": "Guelaguetza",
+      "url": "https://www.yelp.com/biz/guelaguetza-los-angeles-2",
+      "description": "Local LA restaurant - test Yelp extraction and website discovery"
+    },
+    {
+      "name": "Republique",
+      "url": "https://www.yelp.com/biz/republique-los-angeles",
+      "description": "Upscale restaurant - should have comprehensive menu on official site"
+    },
+    {
+      "name": "Night + Market",
+      "url": "https://www.yelp.com/biz/night-market-west-hollywood",
+      "description": "Thai restaurant - test enhanced price detection"
+    },
+    {
+      "name": "Bestia",
+      "url": "https://www.yelp.com/biz/bestia-los-angeles",
+      "description": "Popular Italian restaurant - comprehensive test case"
+    }
+  ]
+}

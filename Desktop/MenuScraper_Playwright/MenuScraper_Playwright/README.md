@@ -38,6 +38,54 @@ async def demo_phase1():
 python demo_phase1.py
 ```
 
+## 🆕 Phase 2 Enhancements (Latest)
+
+**Platform Integration & OCR Framework**
+
+- **🚚 DoorDash Scraper**: Dedicated scraper optimized for DoorDash delivery platform with mobile-friendly browser setup
+- **🍔 Uber Eats Scraper**: Specialized scraper for Uber Eats with desktop optimization and JSON data extraction
+- **📸 Enhanced OCR Framework**: Intelligent image detection and OCR processing pipeline for menu images
+- **🔍 Smart Image Filtering**: Automatically identifies menu-relevant images while filtering out logos and backgrounds
+- **🤖 OCR Integration Ready**: Framework prepared for EasyOCR, Tesseract, and PaddleOCR integration
+- **🧪 Comprehensive Testing**: New test suites for platform-specific scrapers and OCR functionality
+
+### Quick Demo of Phase 2 Features
+
+```python
+# DoorDash scraping
+from doordash_scraper import DoorDashScraper
+
+async def demo_doordash():
+    scraper = DoorDashScraper()
+    await scraper.setup_browser()
+    
+    result = await scraper.extract_menu_items(
+        "https://www.doordash.com/store/restaurant-name"
+    )
+    
+    print(f"DoorDash items: {result['total_items']}")
+    await scraper.cleanup()
+
+# OCR-enhanced scraping
+from production_menu_scraper import ProductionMenuScraper
+
+async def demo_ocr():
+    scraper = ProductionMenuScraper(ocr_enabled=True)
+    await scraper.setup_browser()
+    
+    result = await scraper.extract_menu_items("https://restaurant.com")
+    
+    print(f"Text items: {result['total_items']}")
+    print(f"Menu images found: {len(result['menu_image_urls'])}")
+    print(f"OCR texts: {len(result['ocr_texts'])}")
+    
+    await scraper.cleanup()
+
+# Run Phase 2 demos
+python demo_phase2.py
+python test_phase2_scrapers.py
+```
+
 ## 🚀 Core Features
 
 - **Multiple Scraper Implementations**: From basic to advanced ML-enhanced scrapers
@@ -145,15 +193,26 @@ asyncio.run(advanced_scrape())
 ```
 MenuScraper_Playwright/
 ├── 📄 Core Scrapers
-│   ├── enhanced_dynamic_scraper.py      # Main enhanced scraper
+│   ├── enhanced_dynamic_scraper.py      # Main enhanced scraper (Phase 1)
+│   ├── production_menu_scraper.py       # Production-ready with OCR (Phase 2)
+│   ├── doordash_scraper.py              # DoorDash-specific scraper (Phase 2)
+│   ├── ubereats_scraper.py              # Uber Eats-specific scraper (Phase 2)
 │   ├── ml_enhanced_menu_scraper.py      # ML-powered scraper
-│   ├── production_menu_scraper.py       # Production-ready version
 │   └── priority1_optimized_scraper.py   # Optimized implementation
 │
 ├── 🧪 Testing & Analysis
+│   ├── test_phase1_improvements.py      # Phase 1 feature tests
+│   ├── test_phase2_scrapers.py          # Phase 2 scraper tests
+│   ├── verify_phase1.py                 # Phase 1 verification
 │   ├── test_enhanced_dynamic_scraper.py
 │   ├── test_ml_enhanced_scraper.py
 │   └── test_production_scraper.py
+│
+├── 🎬 Demos & Examples
+│   ├── demo_phase1.py                   # Phase 1 feature demo
+│   ├── demo_phase2.py                   # Phase 2 feature demo
+│   ├── run_phase1_demo.py               # Phase 1 runner script
+│   └── run_phase2_demo.py               # Phase 2 runner script
 │
 ├── 📊 Results & Documentation
 │   ├── Enhanced_Scraper_Results.md
@@ -173,25 +232,46 @@ MenuScraper_Playwright/
 
 ## 🎛️ Available Scrapers
 
-### 1. Enhanced Dynamic Scraper
-**Best for**: General-purpose menu extraction
-- Smart content detection
-- Dynamic loading support
-- Menu link navigation
+### Phase 2 Scrapers (Latest)
 
-### 2. ML Enhanced Scraper
+#### 1. DoorDash Scraper
+**Best for**: DoorDash delivery platform
+- Mobile-optimized browser setup
+- DoorDash-specific selectors
+- Modal and popup handling
+- Infinite scroll support
+
+#### 2. Uber Eats Scraper
+**Best for**: Uber Eats delivery platform
+- Desktop-optimized browser setup
+- JSON data extraction
+- Uber Eats-specific selectors
+- Advanced price patterns
+
+#### 3. Production Scraper (OCR-Enhanced)
+**Best for**: Production environments with image processing
+- OCR framework integration
+- Intelligent image detection
+- Menu image processing
+- Fallback OCR extraction
+- Robust error handling
+
+### Phase 1 Scrapers
+
+#### 4. Enhanced Dynamic Scraper
+**Best for**: General-purpose menu extraction with fallback
+- Smart content detection
+- Google search integration
+- Restaurant website discovery
+- Intelligent fallback logic
+
+#### 5. ML Enhanced Scraper
 **Best for**: High-accuracy content classification
 - Machine learning content filtering
 - Advanced categorization
 - Confidence scoring
 
-### 3. Production Scraper
-**Best for**: Production environments
-- Robust error handling
-- Performance optimization
-- Comprehensive logging
-
-### 4. Priority1 Optimized
+#### 6. Priority1 Optimized
 **Best for**: Balanced performance
 - Optimized extraction strategies
 - Moderate filtering

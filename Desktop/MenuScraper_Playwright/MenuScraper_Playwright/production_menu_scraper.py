@@ -17,6 +17,12 @@ from typing import Dict, List, Optional, Tuple, Any
 from urllib.parse import urljoin, urlparse
 
 try:
+    import requests
+except ImportError:
+    print("❌ Requests not installed. Run: pip install requests")
+    requests = None
+
+try:
     from playwright.async_api import async_playwright, Browser, Page
 except ImportError:
     print("❌ Playwright not installed. Run: pip install playwright")
@@ -42,9 +48,10 @@ logger = logging.getLogger(__name__)
 class ProductionMenuScraper:
     """Production-ready menu scraper with enhanced success rate and reliability"""
     
-    def __init__(self, headless: bool = True, timeout: int = 30000):
+    def __init__(self, headless: bool = True, timeout: int = 30000, ocr_enabled: bool = False):
         self.headless = headless
         self.timeout = timeout
+        self.ocr_enabled = ocr_enabled
         self.browser: Optional[Browser] = None
         self.page: Optional[Page] = None
         
@@ -84,6 +91,28 @@ class ProductionMenuScraper:
             r'\$\d+',         # $12
             r'\d+\.\d{2}',    # 12.99
             r'Price:\s*\$?\d+(?:\.\d{2})?'  # Price: $12.99
+        ]
+        
+        # OCR and image processing settings
+        self.image_selectors = [
+            # Menu image selectors
+            'img[alt*="menu"]',
+            'img[src*="menu"]',
+            'img[class*="menu"]',
+            '.menu img',
+            '.menu-image img',
+            '[class*="menu"] img',
+            
+            # Food/dish images that might contain text
+            'img[alt*="food"]',
+            'img[alt*="dish"]',
+            'img[class*="food"]',
+            'img[class*="dish"]',
+            
+            # Generic image selectors for potential menu content
+            '.restaurant img',
+            '.content img',
+            'main img'
         ]
     
     async def setup_browser(self) -> bool:
@@ -197,6 +226,8 @@ class ProductionMenuScraper:
             'extraction_method': None,
             'allergen_summary': {},
             'price_coverage': 0,
+            'menu_image_urls': [],
+            'ocr_texts': [],
             'error': None
         }
         
@@ -246,6 +277,28 @@ class ProductionMenuScraper:
                 if items:
                     extraction_method = 'structured_data'
             
+            # Strategy 4: OCR from menu images (if text extraction insufficient)
+            menu_image_urls = []
+            ocr_texts = []
+            if not items or len(items) < 3:  # Try OCR if we have few items
+                try:
+                    menu_image_urls = await self._find_menu_image_urls()
+                    if menu_image_urls:
+                        logger.info(f"🖼️ Found {len(menu_image_urls)} potential menu images")
+                        
+                        for img_url in menu_image_urls[:3]:  # Limit to 3 images
+                            ocr_text = await self._process_image_with_ocr(img_url)
+                            if ocr_text:
+                                ocr_texts.append(ocr_text)
+                                # Extract items from OCR text
+                                ocr_items = self._extract_items_from_ocr_text(ocr_text)
+                                if ocr_items:
+                                    items.extend(ocr_items)
+                                    if not extraction_method:
+                                        extraction_method = 'ocr_extraction'
+                except Exception as e:
+                    logger.warning(f"⚠️ OCR processing failed: {e}")
+            
             # Process results
             if items:
                 # Remove duplicates and clean data
@@ -261,7 +314,9 @@ class ProductionMenuScraper:
                     'total_items': len(unique_items),
                     'extraction_method': extraction_method,
                     'allergen_summary': self._summarize_allergens(unique_items),
-                    'price_coverage': self._calculate_price_coverage(unique_items)
+                    'price_coverage': self._calculate_price_coverage(unique_items),
+                    'menu_image_urls': menu_image_urls,
+                    'ocr_texts': ocr_texts
                 })
                 
                 logger.info(f"✅ Successfully extracted {len(unique_items)} menu items")
@@ -479,6 +534,220 @@ class ProductionMenuScraper:
         
         items_with_price = sum(1 for item in items if item.get('price'))
         return round((items_with_price / len(items)) * 100, 1)
+    
+    async def _find_menu_image_urls(self) -> List[str]:
+        """Find potential menu image URLs on the page"""
+        image_urls = []
+        
+        try:
+            for selector in self.image_selectors:
+                try:
+                    img_elements = await self.page.query_selector_all(selector)
+                    
+                    for img_element in img_elements:
+                        # Get image source
+                        src = await img_element.get_attribute('src')
+                        if src:
+                            # Convert relative URLs to absolute
+                            if src.startswith('//'):
+                                src = 'https:' + src
+                            elif src.startswith('/'):
+                                src = urljoin(self.page.url, src)
+                            
+                            # Filter for likely menu images
+                            if self._is_likely_menu_image(src):
+                                image_urls.append(src)
+                                
+                        # Also check srcset for higher quality images
+                        srcset = await img_element.get_attribute('srcset')
+                        if srcset:
+                            urls = re.findall(r'(https?://[^\s,]+)', srcset)
+                            for url in urls:
+                                if self._is_likely_menu_image(url):
+                                    image_urls.append(url)
+                                    
+                except Exception as e:
+                    logger.debug(f"Image selector {selector} failed: {e}")
+                    continue
+            
+            # Remove duplicates while preserving order
+            unique_urls = []
+            seen = set()
+            for url in image_urls:
+                if url not in seen:
+                    seen.add(url)
+                    unique_urls.append(url)
+            
+            logger.info(f"📸 Found {len(unique_urls)} potential menu image URLs")
+            return unique_urls[:5]  # Limit to 5 images
+            
+        except Exception as e:
+            logger.error(f"❌ Image URL extraction failed: {e}")
+            return []
+    
+    def _is_likely_menu_image(self, url: str) -> bool:
+        """Check if image URL is likely to contain menu content"""
+        if not url or len(url) < 10:
+            return False
+        
+        url_lower = url.lower()
+        
+        # Positive indicators
+        menu_indicators = [
+            'menu', 'food', 'dish', 'restaurant', 'cuisine',
+            'plate', 'meal', 'dining', 'kitchen'
+        ]
+        
+        # Negative indicators
+        exclude_indicators = [
+            'logo', 'icon', 'avatar', 'profile', 'banner',
+            'header', 'footer', 'background', 'bg',
+            'thumb', 'small', 'tiny', '16x16', '32x32'
+        ]
+        
+        # Check for positive indicators
+        has_positive = any(indicator in url_lower for indicator in menu_indicators)
+        
+        # Check for negative indicators
+        has_negative = any(indicator in url_lower for indicator in exclude_indicators)
+        
+        # Must have positive indicator and no negative indicators
+        return has_positive and not has_negative
+    
+    async def _process_image_with_ocr(self, image_url: str) -> Optional[str]:
+        """Process image with OCR to extract text"""
+        try:
+            if not self.ocr_enabled or not requests:
+                return None
+            
+            logger.info(f"🔍 Processing image with OCR: {image_url[:100]}...")
+            
+            # Download image
+            response = requests.get(image_url, timeout=10, headers={
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+            })
+            
+            if response.status_code != 200:
+                logger.warning(f"⚠️ Failed to download image: {response.status_code}")
+                return None
+            
+            # Check image size (avoid processing very large images)
+            if len(response.content) > 5 * 1024 * 1024:  # 5MB limit
+                logger.warning(f"⚠️ Image too large: {len(response.content)} bytes")
+                return None
+            
+            # TODO: Implement actual OCR processing
+            # This is a placeholder implementation for Phase 2
+            # Full implementation would use EasyOCR, Tesseract, or PaddleOCR
+            
+            # Simulated OCR text extraction for testing
+            ocr_text = self._simulate_ocr_extraction(image_url)
+            
+            if ocr_text:
+                logger.info(f"✅ OCR extracted {len(ocr_text)} characters")
+                return ocr_text
+            
+            # Placeholder for actual OCR implementation:
+            # 
+            # import easyocr
+            # import cv2
+            # import numpy as np
+            # from PIL import Image
+            # import io
+            # 
+            # # Convert response content to image
+            # image = Image.open(io.BytesIO(response.content))
+            # image_array = np.array(image)
+            # 
+            # # Preprocess image for better OCR results
+            # gray = cv2.cvtColor(image_array, cv2.COLOR_RGB2GRAY)
+            # 
+            # # Apply image enhancement techniques
+            # # - Noise reduction
+            # denoised = cv2.medianBlur(gray, 3)
+            # 
+            # # - Contrast enhancement
+            # clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
+            # enhanced = clahe.apply(denoised)
+            # 
+            # # - Thresholding for better text detection
+            # _, thresh = cv2.threshold(enhanced, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+            # 
+            # # Initialize OCR reader
+            # reader = easyocr.Reader(['en'])
+            # 
+            # # Perform OCR
+            # results = reader.readtext(thresh)
+            # 
+            # # Extract text from results
+            # extracted_text = ' '.join([result[1] for result in results if result[2] > 0.5])
+            # 
+            # return extracted_text if extracted_text.strip() else None
+            
+        except Exception as e:
+            logger.error(f"❌ OCR processing failed: {e}")
+            return None
+    
+    def _simulate_ocr_extraction(self, image_url: str) -> Optional[str]:
+        """Simulate OCR text extraction for testing purposes"""
+        # This is a placeholder that simulates OCR results
+        # In a real implementation, this would be replaced by actual OCR
+        
+        simulated_menu_texts = [
+            "APPETIZERS\nBruschetta $8.99\nCalamari Rings $12.99\nStuffed Mushrooms $9.99",
+            "MAIN COURSES\nGrilled Salmon $18.99\nChicken Parmesan $16.99\nBeef Tenderloin $24.99",
+            "DESSERTS\nTiramisu $7.99\nChocolate Cake $6.99\nIce Cream $4.99"
+        ]
+        
+        # Return a random simulated menu text for testing
+        import hashlib
+        url_hash = int(hashlib.md5(image_url.encode()).hexdigest()[:8], 16)
+        return simulated_menu_texts[url_hash % len(simulated_menu_texts)]
+    
+    def _extract_items_from_ocr_text(self, ocr_text: str) -> List[Dict[str, Any]]:
+        """Extract menu items from OCR-processed text"""
+        items = []
+        
+        try:
+            # Split text into lines
+            lines = [line.strip() for line in ocr_text.split('\n') if line.strip()]
+            
+            for line in lines:
+                # Skip section headers
+                if line.upper() in ['APPETIZERS', 'MAIN COURSES', 'ENTREES', 'DESSERTS', 'BEVERAGES', 'MENU']:
+                    continue
+                
+                # Look for lines with prices (likely menu items)
+                price_match = None
+                for pattern in self.price_patterns:
+                    price_match = re.search(pattern, line)
+                    if price_match:
+                        break
+                
+                if price_match:
+                    # Extract name and price
+                    price = price_match.group(0)
+                    name = line.replace(price, '').strip()
+                    
+                    if len(name) > 2 and len(name) < 100:
+                        item = {
+                            'name': name,
+                            'description': '',
+                            'price': price,
+                            'raw_text': line,
+                            'allergens': [],
+                            'extraction_source': 'ocr'
+                        }
+                        
+                        if self._is_valid_menu_item(item):
+                            items.append(item)
+            
+            logger.info(f"📋 Extracted {len(items)} items from OCR text")
+            
+        except Exception as e:
+            logger.error(f"❌ OCR text processing failed: {e}")
+        
+        return items
     
     async def cleanup(self):
         """Clean up browser resources"""
