@@ -1,0 +1,253 @@
+{
+  "scraper_version": "Production v1.0",
+  "test_date": "2025-06-29 10:51:37",
+  "sample_size": 20,
+  "success_rate": 0.0,
+  "successful_scrapes": 0,
+  "total_items_extracted": 0,
+  "avg_items_per_success": 0,
+  "avg_processing_time": 19.73,
+  "extraction_method_distribution": {},
+  "allergen_detections": {},
+  "price_coverage_stats": {
+    "avg_coverage": 0,
+    "min_coverage": 0,
+    "max_coverage": 0
+  },
+  "quality_metrics": {
+    "items_with_prices": 0,
+    "items_with_descriptions": 0,
+    "items_with_allergens": 0,
+    "avg_item_name_length": 0
+  },
+  "performance_metrics": {
+    "fastest_scrape": 14.47,
+    "slowest_scrape": 25.95,
+    "total_test_time": 415.93
+  },
+  "error_analysis": {
+    "Navigation failed": 20
+  },
+  "detailed_results": [
+    {
+      "restaurant_name": "La Crepe Bistro",
+      "url": "https://www.yelp.com/biz/la-crepe-bistro-homer-glen",
+      "scraping_success": false,
+      "total_items": 0,
+      "processing_time": 20.86,
+      "extraction_method": null,
+      "price_coverage": 0,
+      "allergen_summary": {},
+      "error": "Navigation failed"
+    },
+    {
+      "restaurant_name": "Italia Imports",
+      "url": "https://www.yelp.com/biz/italia-imports-chicago",
+      "scraping_success": false,
+      "total_items": 0,
+      "processing_time": 24.11,
+      "extraction_method": null,
+      "price_coverage": 0,
+      "allergen_summary": {},
+      "error": "Navigation failed"
+    },
+    {
+      "restaurant_name": "RoccoVino's Italian Restaurant",
+      "url": "https://www.yelp.com/biz/roccovinos-italian-restaurant-chicago",
+      "scraping_success": false,
+      "total_items": 0,
+      "processing_time": 25.95,
+      "extraction_method": null,
+      "price_coverage": 0,
+      "allergen_summary": {},
+      "error": "Navigation failed"
+    },
+    {
+      "restaurant_name": "Pyramid Supermarket",
+      "url": "https://www.yelp.com/biz/pyramid-supermarket-chicago",
+      "scraping_success": false,
+      "total_items": 0,
+      "processing_time": 16.89,
+      "extraction_method": null,
+      "price_coverage": 0,
+      "allergen_summary": {},
+      "error": "Navigation failed"
+    },
+    {
+      "restaurant_name": "Blueberry Hill Breakfast Cafe",
+      "url": "https://www.yelp.com/biz/blueberry-hill-breakfast-cafe-chicago",
+      "scraping_success": false,
+      "total_items": 0,
+      "processing_time": 19.01,
+      "extraction_method": null,
+      "price_coverage": 0,
+      "allergen_summary": {},
+      "error": "Navigation failed"
+    },
+    {
+      "restaurant_name": "Alinea",
+      "url": "https://www.yelp.com/biz/alinea-chicago",
+      "scraping_success": false,
+      "total_items": 0,
+      "processing_time": 24.26,
+      "extraction_method": null,
+      "price_coverage": 0,
+      "allergen_summary": {},
+      "error": "Navigation failed"
+    },
+    {
+      "restaurant_name": "Girl & the Goat",
+      "url": "https://www.yelp.com/biz/girl-and-the-goat-chicago",
+      "scraping_success": false,
+      "total_items": 0,
+      "processing_time": 14.47,
+      "extraction_method": null,
+      "price_coverage": 0,
+      "allergen_summary": {},
+      "error": "Navigation failed"
+    },
+    {
+      "restaurant_name": "Au Cheval",
+      "url": "https://www.yelp.com/biz/au-cheval-chicago",
+      "scraping_success": false,
+      "total_items": 0,
+      "processing_time": 14.75,
+      "extraction_method": null,
+      "price_coverage": 0,
+      "allergen_summary": {},
+      "error": "Navigation failed"
+    },
+    {
+      "restaurant_name": "The Purple Pig",
+      "url": "https://www.yelp.com/biz/the-purple-pig-chicago",
+      "scraping_success": false,
+      "total_items": 0,
+      "processing_time": 17.59,
+      "extraction_method": null,
+      "price_coverage": 0,
+      "allergen_summary": {},
+      "error": "Navigation failed"
+    },
+    {
+      "restaurant_name": "Gibsons Bar & Steakhouse",
+      "url": "https://www.yelp.com/biz/gibsons-bar-and-steakhouse-chicago",
+      "scraping_success": false,
+      "total_items": 0,
+      "processing_time": 19.25,
+      "extraction_method": null,
+      "price_coverage": 0,
+      "allergen_summary": {},
+      "error": "Navigation failed"
+    },
+    {
+      "restaurant_name": "Pequod's Pizza",
+      "url": "https://www.yelp.com/biz/pequods-pizza-chicago",
+      "scraping_success": false,
+      "total_items": 0,
+      "processing_time": 23.48,
+      "extraction_method": null,
+      "price_coverage": 0,
+      "allergen_summary": {},
+      "error": "Navigation failed"
+    },
+    {
+      "restaurant_name": "Lou Malnati's Pizzeria",
+      "url": "https://www.yelp.com/biz/lou-malnatis-pizzeria-chicago",
+      "scraping_success": false,
+      "total_items": 0,
+      "processing_time": 15.72,
+      "extraction_method": null,
+      "price_coverage": 0,
+      "allergen_summary": {},
+      "error": "Navigation failed"
+    },
+    {
+      "restaurant_name": "Portillo's",
+      "url": "https://www.yelp.com/biz/portillos-chicago",
+      "scraping_success": false,
+      "total_items": 0,
+      "processing_time": 20.46,
+      "extraction_method": null,
+      "price_coverage": 0,
+      "allergen_summary": {},
+      "error": "Navigation failed"
+    },
+    {
+      "restaurant_name": "The Publican",
+      "url": "https://www.yelp.com/biz/the-publican-chicago",
+      "scraping_success": false,
+      "total_items": 0,
+      "processing_time": 18.02,
+      "extraction_method": null,
+      "price_coverage": 0,
+      "allergen_summary": {},
+      "error": "Navigation failed"
+    },
+    {
+      "restaurant_name": "Wildberry Pancakes & Cafe",
+      "url": "https://www.yelp.com/biz/wildberry-pancakes-and-cafe-chicago",
+      "scraping_success": false,
+      "total_items": 0,
+      "processing_time": 21.62,
+      "extraction_method": null,
+      "price_coverage": 0,
+      "allergen_summary": {},
+      "error": "Navigation failed"
+    },
+    {
+      "restaurant_name": "Xoco",
+      "url": "https://www.yelp.com/biz/xoco-chicago",
+      "scraping_success": false,
+      "total_items": 0,
+      "processing_time": 23.07,
+      "extraction_method": null,
+      "price_coverage": 0,
+      "allergen_summary": {},
+      "error": "Navigation failed"
+    },
+    {
+      "restaurant_name": "Frontera Grill",
+      "url": "https://www.yelp.com/biz/frontera-grill-chicago",
+      "scraping_success": false,
+      "total_items": 0,
+      "processing_time": 23.41,
+      "extraction_method": null,
+      "price_coverage": 0,
+      "allergen_summary": {},
+      "error": "Navigation failed"
+    },
+    {
+      "restaurant_name": "Smoque BBQ",
+      "url": "https://www.yelp.com/biz/smoque-bbq-chicago",
+      "scraping_success": false,
+      "total_items": 0,
+      "processing_time": 17.46,
+      "extraction_method": null,
+      "price_coverage": 0,
+      "allergen_summary": {},
+      "error": "Navigation failed"
+    },
+    {
+      "restaurant_name": "Kuma's Corner",
+      "url": "https://www.yelp.com/biz/kumas-corner-chicago",
+      "scraping_success": false,
+      "total_items": 0,
+      "processing_time": 15.2,
+      "extraction_method": null,
+      "price_coverage": 0,
+      "allergen_summary": {},
+      "error": "Navigation failed"
+    },
+    {
+      "restaurant_name": "The Gage",
+      "url": "https://www.yelp.com/biz/the-gage-chicago",
+      "scraping_success": false,
+      "total_items": 0,
+      "processing_time": 18.96,
+      "extraction_method": null,
+      "price_coverage": 0,
+      "allergen_summary": {},
+      "error": "Navigation failed"
+    }
+  ]
+}

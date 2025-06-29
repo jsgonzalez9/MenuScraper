@@ -1,0 +1,389 @@
+{
+  "test_info": {
+    "timestamp": "2025-06-29T10:15:08.611889",
+    "sample_size": 15,
+    "scraper_version": "final_optimized_v1",
+    "target_success_rate": "50%+",
+    "fixes_applied": [
+      "Fixed CSS selector issues",
+      "Improved error handling",
+      "More permissive validation",
+      "Better fallback strategies",
+      "Simplified extraction methods"
+    ]
+  },
+  "restaurants": {
+    "La Crepe Bistro": {
+      "menu_items": [
+        {
+          "name": "Hey there! Before you continue, we just need to check that you're not a robot.",
+          "description": "",
+          "price": null,
+          "confidence": 0.5,
+          "sources": [
+            "text"
+          ],
+          "category": "entree",
+          "extraction_method": "text_content"
+        },
+        {
+          "name": "Submit",
+          "description": "",
+          "price": null,
+          "confidence": 0.3,
+          "sources": [
+            "text"
+          ],
+          "category": "entree",
+          "extraction_method": "text_content"
+        }
+      ],
+      "total_items": 2,
+      "scraping_success": true,
+      "ocr_used": false,
+      "menu_page_found": false,
+      "source": "final_optimized_scraping",
+      "strategies_used": 1,
+      "raw_candidates": 2,
+      "processing_time": 3.68,
+      "extraction_methods": [
+        "text"
+      ],
+      "quality_score": 0.4
+    },
+    "Italia Imports": {
+      "menu_items": [
+        {
+          "name": "Hey there! Before you continue, we just need to check that you're not a robot.",
+          "description": "",
+          "price": null,
+          "confidence": 0.5,
+          "sources": [
+            "text"
+          ],
+          "category": "entree",
+          "extraction_method": "text_content"
+        },
+        {
+          "name": "Submit",
+          "description": "",
+          "price": null,
+          "confidence": 0.3,
+          "sources": [
+            "text"
+          ],
+          "category": "entree",
+          "extraction_method": "text_content"
+        }
+      ],
+      "total_items": 2,
+      "scraping_success": true,
+      "ocr_used": false,
+      "menu_page_found": false,
+      "source": "final_optimized_scraping",
+      "strategies_used": 1,
+      "raw_candidates": 2,
+      "processing_time": 3.26,
+      "extraction_methods": [
+        "text"
+      ],
+      "quality_score": 0.4
+    },
+    "RoccoVino's Italian Restaurant": {
+      "menu_items": [],
+      "total_items": 0,
+      "scraping_success": false,
+      "ocr_used": false,
+      "menu_page_found": false,
+      "source": "final_optimized_scraping",
+      "strategies_used": 0,
+      "raw_candidates": 0,
+      "processing_time": 3.22,
+      "extraction_methods": [],
+      "quality_score": 0.0
+    },
+    "Pyramid Supermarket": {
+      "menu_items": [
+        {
+          "name": "Hey there! Before you continue, we just need to check that you're not a robot.",
+          "description": "",
+          "price": null,
+          "confidence": 0.5,
+          "sources": [
+            "text"
+          ],
+          "category": "entree",
+          "extraction_method": "text_content"
+        },
+        {
+          "name": "Submit",
+          "description": "",
+          "price": null,
+          "confidence": 0.3,
+          "sources": [
+            "text"
+          ],
+          "category": "entree",
+          "extraction_method": "text_content"
+        }
+      ],
+      "total_items": 2,
+      "scraping_success": true,
+      "ocr_used": false,
+      "menu_page_found": false,
+      "source": "final_optimized_scraping",
+      "strategies_used": 1,
+      "raw_candidates": 2,
+      "processing_time": 3.27,
+      "extraction_methods": [
+        "text"
+      ],
+      "quality_score": 0.4
+    },
+    "Blueberry Hill Breakfast Cafe": {
+      "menu_items": [],
+      "total_items": 0,
+      "scraping_success": false,
+      "ocr_used": false,
+      "menu_page_found": false,
+      "source": "final_optimized_scraping",
+      "strategies_used": 0,
+      "raw_candidates": 0,
+      "processing_time": 3.13,
+      "extraction_methods": [],
+      "quality_score": 0.0
+    },
+    "Alinea": {
+      "menu_items": [],
+      "total_items": 0,
+      "scraping_success": false,
+      "ocr_used": false,
+      "menu_page_found": false,
+      "source": "final_optimized_scraping",
+      "strategies_used": 0,
+      "raw_candidates": 0,
+      "processing_time": 3.14,
+      "extraction_methods": [],
+      "quality_score": 0.0
+    },
+    "Girl & the Goat": {
+      "menu_items": [],
+      "total_items": 0,
+      "scraping_success": false,
+      "ocr_used": false,
+      "menu_page_found": false,
+      "source": "final_optimized_scraping",
+      "strategies_used": 0,
+      "raw_candidates": 0,
+      "processing_time": 3.12,
+      "extraction_methods": [],
+      "quality_score": 0.0
+    },
+    "Au Cheval": {
+      "menu_items": [
+        {
+          "name": "Hey there! Before you continue, we just need to check that you're not a robot.",
+          "description": "",
+          "price": null,
+          "confidence": 0.5,
+          "sources": [
+            "text"
+          ],
+          "category": "entree",
+          "extraction_method": "text_content"
+        },
+        {
+          "name": "Submit",
+          "description": "",
+          "price": null,
+          "confidence": 0.3,
+          "sources": [
+            "text"
+          ],
+          "category": "entree",
+          "extraction_method": "text_content"
+        }
+      ],
+      "total_items": 2,
+      "scraping_success": true,
+      "ocr_used": false,
+      "menu_page_found": false,
+      "source": "final_optimized_scraping",
+      "strategies_used": 1,
+      "raw_candidates": 2,
+      "processing_time": 3.27,
+      "extraction_methods": [
+        "text"
+      ],
+      "quality_score": 0.4
+    },
+    "The Purple Pig": {
+      "menu_items": [],
+      "total_items": 0,
+      "scraping_success": false,
+      "ocr_used": false,
+      "menu_page_found": false,
+      "source": "final_optimized_scraping",
+      "strategies_used": 0,
+      "raw_candidates": 0,
+      "processing_time": 3.12,
+      "extraction_methods": [],
+      "quality_score": 0.0
+    },
+    "Gibsons Bar & Steakhouse": {
+      "menu_items": [
+        {
+          "name": "Hey there! Before you continue, we just need to check that you're not a robot.",
+          "description": "",
+          "price": null,
+          "confidence": 0.5,
+          "sources": [
+            "text"
+          ],
+          "category": "entree",
+          "extraction_method": "text_content"
+        },
+        {
+          "name": "Submit",
+          "description": "",
+          "price": null,
+          "confidence": 0.3,
+          "sources": [
+            "text"
+          ],
+          "category": "entree",
+          "extraction_method": "text_content"
+        }
+      ],
+      "total_items": 2,
+      "scraping_success": true,
+      "ocr_used": false,
+      "menu_page_found": false,
+      "source": "final_optimized_scraping",
+      "strategies_used": 1,
+      "raw_candidates": 2,
+      "processing_time": 3.29,
+      "extraction_methods": [
+        "text"
+      ],
+      "quality_score": 0.4
+    },
+    "Pequod's Pizza": {
+      "menu_items": [],
+      "total_items": 0,
+      "scraping_success": false,
+      "ocr_used": false,
+      "menu_page_found": false,
+      "source": "final_optimized_scraping",
+      "strategies_used": 0,
+      "raw_candidates": 0,
+      "processing_time": 3.12,
+      "extraction_methods": [],
+      "quality_score": 0.0
+    },
+    "Lou Malnati's Pizzeria": {
+      "menu_items": [
+        {
+          "name": "Hey there! Before you continue, we just need to check that you're not a robot.",
+          "description": "",
+          "price": null,
+          "confidence": 0.5,
+          "sources": [
+            "text"
+          ],
+          "category": "entree",
+          "extraction_method": "text_content"
+        },
+        {
+          "name": "Submit",
+          "description": "",
+          "price": null,
+          "confidence": 0.3,
+          "sources": [
+            "text"
+          ],
+          "category": "entree",
+          "extraction_method": "text_content"
+        }
+      ],
+      "total_items": 2,
+      "scraping_success": true,
+      "ocr_used": false,
+      "menu_page_found": false,
+      "source": "final_optimized_scraping",
+      "strategies_used": 1,
+      "raw_candidates": 2,
+      "processing_time": 3.28,
+      "extraction_methods": [
+        "text"
+      ],
+      "quality_score": 0.4
+    },
+    "Portillo's": {
+      "menu_items": [],
+      "total_items": 0,
+      "scraping_success": false,
+      "ocr_used": false,
+      "menu_page_found": false,
+      "source": "final_optimized_scraping",
+      "strategies_used": 0,
+      "raw_candidates": 0,
+      "processing_time": 3.14,
+      "extraction_methods": [],
+      "quality_score": 0.0
+    },
+    "The Publican": {
+      "menu_items": [],
+      "total_items": 0,
+      "scraping_success": false,
+      "ocr_used": false,
+      "menu_page_found": false,
+      "source": "final_optimized_scraping",
+      "strategies_used": 0,
+      "raw_candidates": 0,
+      "processing_time": 3.13,
+      "extraction_methods": [],
+      "quality_score": 0.0
+    },
+    "Wildberry Pancakes & Cafe": {
+      "menu_items": [],
+      "total_items": 0,
+      "scraping_success": false,
+      "ocr_used": false,
+      "menu_page_found": false,
+      "source": "final_optimized_scraping",
+      "strategies_used": 0,
+      "raw_candidates": 0,
+      "processing_time": 3.16,
+      "extraction_methods": [],
+      "quality_score": 0.0
+    }
+  },
+  "summary": {
+    "total_tested": 15,
+    "successful_extractions": 6,
+    "success_rate": 40.0,
+    "total_menu_items": 12,
+    "avg_items_per_success": 2.0,
+    "menu_pages_found": 0,
+    "structured_data_usage": 0,
+    "avg_processing_time": 3.22,
+    "avg_quality_score": 0.16,
+    "strategy_distribution": {
+      "text": 6
+    },
+    "category_distribution": {
+      "entree": 12
+    },
+    "price_extraction_rate": 0.0,
+    "error_count": 0,
+    "successful_restaurants": [
+      "La Crepe Bistro",
+      "Italia Imports",
+      "Pyramid Supermarket",
+      "Au Cheval",
+      "Gibsons Bar & Steakhouse",
+      "Lou Malnati's Pizzeria"
+    ]
+  }
+}

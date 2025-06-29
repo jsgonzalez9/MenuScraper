@@ -1,0 +1,256 @@
+{
+  "test_info": {
+    "scraper_version": "Priority1ImprovedScraper",
+    "total_restaurants_tested": 20,
+    "test_timestamp": "2025-06-29 14:29:19"
+  },
+  "performance_metrics": {
+    "success_rate": 0.0,
+    "successful_scrapes": 0,
+    "failed_scrapes": 20,
+    "total_items_extracted": 0,
+    "avg_items_per_success": 0
+  },
+  "content_quality": {
+    "price_coverage": 0,
+    "description_coverage": 0,
+    "avg_confidence_score": 0,
+    "items_with_price": 0,
+    "items_with_description": 0
+  },
+  "categorization": {},
+  "allergen_dietary": {
+    "allergen_detections": 0,
+    "dietary_tag_detections": 0
+  },
+  "extraction_methods": {},
+  "error_analysis": {
+    "error_types": {
+      "No valid menu items found with improved strategies": 20
+    },
+    "failed_restaurants": [
+      "La Crepe Bistro",
+      "Italia Imports",
+      "RoccoVino's Italian Restaurant",
+      "Pyramid Supermarket",
+      "Blueberry Hill Breakfast Cafe",
+      "Alinea",
+      "Girl & the Goat",
+      "Au Cheval",
+      "The Purple Pig",
+      "Gibsons Bar & Steakhouse",
+      "Pequod's Pizza",
+      "Lou Malnati's Pizzeria",
+      "Portillo's",
+      "The Publican",
+      "Wildberry Pancakes & Cafe",
+      "Xoco",
+      "Frontera Grill",
+      "Smoque BBQ",
+      "Kuma's Corner",
+      "The Gage"
+    ]
+  },
+  "detailed_results": [
+    {
+      "restaurant_name": "La Crepe Bistro",
+      "url": "https://www.yelp.com/biz/la-crepe-bistro-homer-glen",
+      "scraping_success": false,
+      "total_items": 0,
+      "processing_time": 12.06503939628601,
+      "extraction_method": null,
+      "items": [],
+      "error": "No valid menu items found with improved strategies"
+    },
+    {
+      "restaurant_name": "Italia Imports",
+      "url": "https://www.yelp.com/biz/italia-imports-chicago",
+      "scraping_success": false,
+      "total_items": 0,
+      "processing_time": 11.541425466537476,
+      "extraction_method": null,
+      "items": [],
+      "error": "No valid menu items found with improved strategies"
+    },
+    {
+      "restaurant_name": "RoccoVino's Italian Restaurant",
+      "url": "https://www.yelp.com/biz/roccovinos-italian-restaurant-chicago",
+      "scraping_success": false,
+      "total_items": 0,
+      "processing_time": 6.823647737503052,
+      "extraction_method": null,
+      "items": [],
+      "error": "No valid menu items found with improved strategies"
+    },
+    {
+      "restaurant_name": "Pyramid Supermarket",
+      "url": "https://www.yelp.com/biz/pyramid-supermarket-chicago",
+      "scraping_success": false,
+      "total_items": 0,
+      "processing_time": 11.80815076828003,
+      "extraction_method": null,
+      "items": [],
+      "error": "No valid menu items found with improved strategies"
+    },
+    {
+      "restaurant_name": "Blueberry Hill Breakfast Cafe",
+      "url": "https://www.yelp.com/biz/blueberry-hill-breakfast-cafe-chicago",
+      "scraping_success": false,
+      "total_items": 0,
+      "processing_time": 6.53973388671875,
+      "extraction_method": null,
+      "items": [],
+      "error": "No valid menu items found with improved strategies"
+    },
+    {
+      "restaurant_name": "Alinea",
+      "url": "https://www.yelp.com/biz/alinea-chicago",
+      "scraping_success": false,
+      "total_items": 0,
+      "processing_time": 11.62592339515686,
+      "extraction_method": null,
+      "items": [],
+      "error": "No valid menu items found with improved strategies"
+    },
+    {
+      "restaurant_name": "Girl & the Goat",
+      "url": "https://www.yelp.com/biz/girl-and-the-goat-chicago",
+      "scraping_success": false,
+      "total_items": 0,
+      "processing_time": 6.4949376583099365,
+      "extraction_method": null,
+      "items": [],
+      "error": "No valid menu items found with improved strategies"
+    },
+    {
+      "restaurant_name": "Au Cheval",
+      "url": "https://www.yelp.com/biz/au-cheval-chicago",
+      "scraping_success": false,
+      "total_items": 0,
+      "processing_time": 11.643459558486938,
+      "extraction_method": null,
+      "items": [],
+      "error": "No valid menu items found with improved strategies"
+    },
+    {
+      "restaurant_name": "The Purple Pig",
+      "url": "https://www.yelp.com/biz/the-purple-pig-chicago",
+      "scraping_success": false,
+      "total_items": 0,
+      "processing_time": 11.598053932189941,
+      "extraction_method": null,
+      "items": [],
+      "error": "No valid menu items found with improved strategies"
+    },
+    {
+      "restaurant_name": "Gibsons Bar & Steakhouse",
+      "url": "https://www.yelp.com/biz/gibsons-bar-and-steakhouse-chicago",
+      "scraping_success": false,
+      "total_items": 0,
+      "processing_time": 11.762985467910767,
+      "extraction_method": null,
+      "items": [],
+      "error": "No valid menu items found with improved strategies"
+    },
+    {
+      "restaurant_name": "Pequod's Pizza",
+      "url": "https://www.yelp.com/biz/pequods-pizza-chicago",
+      "scraping_success": false,
+      "total_items": 0,
+      "processing_time": 11.746446371078491,
+      "extraction_method": null,
+      "items": [],
+      "error": "No valid menu items found with improved strategies"
+    },
+    {
+      "restaurant_name": "Lou Malnati's Pizzeria",
+      "url": "https://www.yelp.com/biz/lou-malnatis-pizzeria-chicago",
+      "scraping_success": false,
+      "total_items": 0,
+      "processing_time": 11.663244724273682,
+      "extraction_method": null,
+      "items": [],
+      "error": "No valid menu items found with improved strategies"
+    },
+    {
+      "restaurant_name": "Portillo's",
+      "url": "https://www.yelp.com/biz/portillos-chicago",
+      "scraping_success": false,
+      "total_items": 0,
+      "processing_time": 11.854667901992798,
+      "extraction_method": null,
+      "items": [],
+      "error": "No valid menu items found with improved strategies"
+    },
+    {
+      "restaurant_name": "The Publican",
+      "url": "https://www.yelp.com/biz/the-publican-chicago",
+      "scraping_success": false,
+      "total_items": 0,
+      "processing_time": 11.667439699172974,
+      "extraction_method": null,
+      "items": [],
+      "error": "No valid menu items found with improved strategies"
+    },
+    {
+      "restaurant_name": "Wildberry Pancakes & Cafe",
+      "url": "https://www.yelp.com/biz/wildberry-pancakes-and-cafe-chicago",
+      "scraping_success": false,
+      "total_items": 0,
+      "processing_time": 6.696977615356445,
+      "extraction_method": null,
+      "items": [],
+      "error": "No valid menu items found with improved strategies"
+    },
+    {
+      "restaurant_name": "Xoco",
+      "url": "https://www.yelp.com/biz/xoco-chicago",
+      "scraping_success": false,
+      "total_items": 0,
+      "processing_time": 11.712782144546509,
+      "extraction_method": null,
+      "items": [],
+      "error": "No valid menu items found with improved strategies"
+    },
+    {
+      "restaurant_name": "Frontera Grill",
+      "url": "https://www.yelp.com/biz/frontera-grill-chicago",
+      "scraping_success": false,
+      "total_items": 0,
+      "processing_time": 11.706727027893066,
+      "extraction_method": null,
+      "items": [],
+      "error": "No valid menu items found with improved strategies"
+    },
+    {
+      "restaurant_name": "Smoque BBQ",
+      "url": "https://www.yelp.com/biz/smoque-bbq-chicago",
+      "scraping_success": false,
+      "total_items": 0,
+      "processing_time": 6.532819986343384,
+      "extraction_method": null,
+      "items": [],
+      "error": "No valid menu items found with improved strategies"
+    },
+    {
+      "restaurant_name": "Kuma's Corner",
+      "url": "https://www.yelp.com/biz/kumas-corner-chicago",
+      "scraping_success": false,
+      "total_items": 0,
+      "processing_time": 11.59501838684082,
+      "extraction_method": null,
+      "items": [],
+      "error": "No valid menu items found with improved strategies"
+    },
+    {
+      "restaurant_name": "The Gage",
+      "url": "https://www.yelp.com/biz/the-gage-chicago",
+      "scraping_success": false,
+      "total_items": 0,
+      "processing_time": 11.581732273101807,
+      "extraction_method": null,
+      "items": [],
+      "error": "No valid menu items found with improved strategies"
+    }
+  ]
+}

@@ -1,0 +1,257 @@
+{
+  "test_results": {
+    "scraper_name": "Priority1FinalScraper",
+    "test_timestamp": "2025-06-29 14:41:39",
+    "total_restaurants": 20,
+    "successful_scrapes": 0,
+    "success_rate": 0.0,
+    "total_items_extracted": 0,
+    "average_items_per_success": 0.0,
+    "total_processing_time": 178.20663976669312,
+    "average_time_per_restaurant": 8.910331988334656,
+    "results": [
+      {
+        "restaurant_name": "La Crepe Bistro",
+        "url": "https://www.yelp.com/biz/la-crepe-bistro-homer-glen",
+        "scraping_success": false,
+        "total_items": 0,
+        "processing_time": 11.832629442214966,
+        "extraction_method": null,
+        "items": [],
+        "error": "No valid menu items found with final strategies"
+      },
+      {
+        "restaurant_name": "Italia Imports",
+        "url": "https://www.yelp.com/biz/italia-imports-chicago",
+        "scraping_success": false,
+        "total_items": 0,
+        "processing_time": 11.402904510498047,
+        "extraction_method": null,
+        "items": [],
+        "error": "No valid menu items found with final strategies"
+      },
+      {
+        "restaurant_name": "RoccoVino's Italian Restaurant",
+        "url": "https://www.yelp.com/biz/roccovinos-italian-restaurant-chicago",
+        "scraping_success": false,
+        "total_items": 0,
+        "processing_time": 11.4418625831604,
+        "extraction_method": null,
+        "items": [],
+        "error": "No valid menu items found with final strategies"
+      },
+      {
+        "restaurant_name": "Pyramid Supermarket",
+        "url": "https://www.yelp.com/biz/pyramid-supermarket-chicago",
+        "scraping_success": false,
+        "total_items": 0,
+        "processing_time": 4.324950218200684,
+        "extraction_method": null,
+        "items": [],
+        "error": "No valid menu items found with final strategies"
+      },
+      {
+        "restaurant_name": "Blueberry Hill Breakfast Cafe",
+        "url": "https://www.yelp.com/biz/blueberry-hill-breakfast-cafe-chicago",
+        "scraping_success": false,
+        "total_items": 0,
+        "processing_time": 11.532273292541504,
+        "extraction_method": null,
+        "items": [],
+        "error": "No valid menu items found with final strategies"
+      },
+      {
+        "restaurant_name": "Alinea",
+        "url": "https://www.yelp.com/biz/alinea-chicago",
+        "scraping_success": false,
+        "total_items": 0,
+        "processing_time": 11.470987558364868,
+        "extraction_method": null,
+        "items": [],
+        "error": "No valid menu items found with final strategies"
+      },
+      {
+        "restaurant_name": "Girl & the Goat",
+        "url": "https://www.yelp.com/biz/girl-and-the-goat-chicago",
+        "scraping_success": false,
+        "total_items": 0,
+        "processing_time": 11.561517477035522,
+        "extraction_method": null,
+        "items": [],
+        "error": "No valid menu items found with final strategies"
+      },
+      {
+        "restaurant_name": "Au Cheval",
+        "url": "https://www.yelp.com/biz/au-cheval-chicago",
+        "scraping_success": false,
+        "total_items": 0,
+        "processing_time": 11.66049575805664,
+        "extraction_method": null,
+        "items": [],
+        "error": "No valid menu items found with final strategies"
+      },
+      {
+        "restaurant_name": "The Purple Pig",
+        "url": "https://www.yelp.com/biz/the-purple-pig-chicago",
+        "scraping_success": false,
+        "total_items": 0,
+        "processing_time": 3.9882442951202393,
+        "extraction_method": null,
+        "items": [],
+        "error": "No valid menu items found with final strategies"
+      },
+      {
+        "restaurant_name": "Gibsons Bar & Steakhouse",
+        "url": "https://www.yelp.com/biz/gibsons-bar-and-steakhouse-chicago",
+        "scraping_success": false,
+        "total_items": 0,
+        "processing_time": 11.560818910598755,
+        "extraction_method": null,
+        "items": [],
+        "error": "No valid menu items found with final strategies"
+      },
+      {
+        "restaurant_name": "Pequod's Pizza",
+        "url": "https://www.yelp.com/biz/pequods-pizza-chicago",
+        "scraping_success": false,
+        "total_items": 0,
+        "processing_time": 3.9635207653045654,
+        "extraction_method": null,
+        "items": [],
+        "error": "No valid menu items found with final strategies"
+      },
+      {
+        "restaurant_name": "Lou Malnati's Pizzeria",
+        "url": "https://www.yelp.com/biz/lou-malnatis-pizzeria-chicago",
+        "scraping_success": false,
+        "total_items": 0,
+        "processing_time": 11.498828887939453,
+        "extraction_method": null,
+        "items": [],
+        "error": "No valid menu items found with final strategies"
+      },
+      {
+        "restaurant_name": "Portillo's",
+        "url": "https://www.yelp.com/biz/portillos-chicago",
+        "scraping_success": false,
+        "total_items": 0,
+        "processing_time": 3.981546401977539,
+        "extraction_method": null,
+        "items": [],
+        "error": "No valid menu items found with final strategies"
+      },
+      {
+        "restaurant_name": "The Publican",
+        "url": "https://www.yelp.com/biz/the-publican-chicago",
+        "scraping_success": false,
+        "total_items": 0,
+        "processing_time": 11.569198369979858,
+        "extraction_method": null,
+        "items": [],
+        "error": "No valid menu items found with final strategies"
+      },
+      {
+        "restaurant_name": "Wildberry Pancakes & Cafe",
+        "url": "https://www.yelp.com/biz/wildberry-pancakes-and-cafe-chicago",
+        "scraping_success": false,
+        "total_items": 0,
+        "processing_time": 3.9614601135253906,
+        "extraction_method": null,
+        "items": [],
+        "error": "No valid menu items found with final strategies"
+      },
+      {
+        "restaurant_name": "Xoco",
+        "url": "https://www.yelp.com/biz/xoco-chicago",
+        "scraping_success": false,
+        "total_items": 0,
+        "processing_time": 11.582668781280518,
+        "extraction_method": null,
+        "items": [],
+        "error": "No valid menu items found with final strategies"
+      },
+      {
+        "restaurant_name": "Frontera Grill",
+        "url": "https://www.yelp.com/biz/frontera-grill-chicago",
+        "scraping_success": false,
+        "total_items": 0,
+        "processing_time": 3.9496123790740967,
+        "extraction_method": null,
+        "items": [],
+        "error": "No valid menu items found with final strategies"
+      },
+      {
+        "restaurant_name": "Smoque BBQ",
+        "url": "https://www.yelp.com/biz/smoque-bbq-chicago",
+        "scraping_success": false,
+        "total_items": 0,
+        "processing_time": 11.483793020248413,
+        "extraction_method": null,
+        "items": [],
+        "error": "No valid menu items found with final strategies"
+      },
+      {
+        "restaurant_name": "Kuma's Corner",
+        "url": "https://www.yelp.com/biz/kumas-corner-chicago",
+        "scraping_success": false,
+        "total_items": 0,
+        "processing_time": 11.483041763305664,
+        "extraction_method": null,
+        "items": [],
+        "error": "No valid menu items found with final strategies"
+      },
+      {
+        "restaurant_name": "The Gage",
+        "url": "https://www.yelp.com/biz/the-gage-chicago",
+        "scraping_success": false,
+        "total_items": 0,
+        "processing_time": 3.956285238265991,
+        "extraction_method": null,
+        "items": [],
+        "error": "No valid menu items found with final strategies"
+      }
+    ]
+  },
+  "analysis": {
+    "content_quality": {
+      "price_coverage": 0.0,
+      "description_coverage": 0.0,
+      "average_confidence": 0.0,
+      "items_with_price": 0,
+      "items_with_description": 0
+    },
+    "category_distribution": {},
+    "extraction_methods": {},
+    "error_analysis": {
+      "total_failures": 20,
+      "failure_rate": 100.0,
+      "error_types": {
+        "No valid menu items found with final strategies": 20
+      }
+    },
+    "performance_comparison": {
+      "previous_scrapers": {
+        "enhanced_scraper": {
+          "success_rate": 35.0,
+          "price_coverage": 0.0
+        },
+        "priority1_scraper": {
+          "success_rate": 35.0,
+          "price_coverage": 0.0
+        },
+        "improved_scraper": {
+          "success_rate": 0.0,
+          "price_coverage": 0.0
+        },
+        "balanced_scraper": {
+          "success_rate": 35.0,
+          "price_coverage": 0.0
+        }
+      },
+      "current_scraper": {
+        "success_rate": 0.0,
+        "price_coverage": 0.0
+      }
+    }
+  }
+}

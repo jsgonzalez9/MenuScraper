@@ -1,0 +1,463 @@
+{
+  "scraper_version": "Practical ML-Inspired v1.0",
+  "test_date": "2025-06-29 11:15:47",
+  "sample_size": 20,
+  "success_rate": 20.0,
+  "successful_scrapes": 4,
+  "total_items_extracted": 48,
+  "avg_items_per_success": 12.0,
+  "avg_processing_time": 2.72,
+  "ml_metrics": {
+    "avg_confidence_score": 0.517,
+    "confidence_score_distribution": {
+      "high": 0,
+      "medium": 48,
+      "low": 0
+    },
+    "extraction_strategy_success": {
+      "enhanced_css_selectors": 4
+    },
+    "quality_assessment_avg": 0.3,
+    "ml_features_usage": {
+      "enhanced_css_selectors": 4,
+      "ml_text_analysis": 0,
+      "structured_data_ml": 0
+    }
+  },
+  "allergen_metrics": {
+    "total_allergen_detections": 0,
+    "allergen_distribution": {},
+    "items_with_allergens": 0,
+    "allergen_coverage_rate": 0.0,
+    "risk_level_distribution": {
+      "high": 0,
+      "medium": 0,
+      "low": 0
+    },
+    "dietary_tags_detected": 0,
+    "dietary_tag_distribution": {}
+  },
+  "quality_metrics": {
+    "items_with_prices": 0,
+    "items_with_descriptions": 0,
+    "items_with_categories": 48,
+    "items_with_dietary_tags": 0,
+    "avg_item_name_length": 13.175470722539762,
+    "price_coverage_avg": 0.0,
+    "category_distribution": {
+      "other": 48
+    }
+  },
+  "performance_metrics": {
+    "fastest_scrape": 2.18,
+    "slowest_scrape": 9.0,
+    "total_test_time": 75.47,
+    "avg_items_per_minute": 38.2,
+    "navigation_success_rate": 100.0
+  },
+  "error_analysis": {
+    "No menu items found with any strategy": 16
+  },
+  "detailed_results": [
+    {
+      "restaurant_name": "La Crepe Bistro",
+      "url": "https://www.yelp.com/biz/la-crepe-bistro-homer-glen",
+      "scraping_success": false,
+      "total_items": 0,
+      "processing_time": 2.43,
+      "extraction_method": null,
+      "ml_features": {
+        "confidence_scores": [],
+        "allergen_detections": {},
+        "quality_assessment": 0,
+        "extraction_strategies_used": []
+      },
+      "allergen_summary": {},
+      "price_coverage": 0,
+      "error": "No menu items found with any strategy"
+    },
+    {
+      "restaurant_name": "Italia Imports",
+      "url": "https://www.yelp.com/biz/italia-imports-chicago",
+      "scraping_success": false,
+      "total_items": 0,
+      "processing_time": 2.21,
+      "extraction_method": null,
+      "ml_features": {
+        "confidence_scores": [],
+        "allergen_detections": {},
+        "quality_assessment": 0,
+        "extraction_strategies_used": []
+      },
+      "allergen_summary": {},
+      "price_coverage": 0,
+      "error": "No menu items found with any strategy"
+    },
+    {
+      "restaurant_name": "RoccoVino's Italian Restaurant",
+      "url": "https://www.yelp.com/biz/roccovinos-italian-restaurant-chicago",
+      "scraping_success": false,
+      "total_items": 0,
+      "processing_time": 2.2,
+      "extraction_method": null,
+      "ml_features": {
+        "confidence_scores": [],
+        "allergen_detections": {},
+        "quality_assessment": 0,
+        "extraction_strategies_used": []
+      },
+      "allergen_summary": {},
+      "price_coverage": 0,
+      "error": "No menu items found with any strategy"
+    },
+    {
+      "restaurant_name": "Pyramid Supermarket",
+      "url": "https://www.yelp.com/biz/pyramid-supermarket-chicago",
+      "scraping_success": false,
+      "total_items": 0,
+      "processing_time": 2.21,
+      "extraction_method": null,
+      "ml_features": {
+        "confidence_scores": [],
+        "allergen_detections": {},
+        "quality_assessment": 0,
+        "extraction_strategies_used": []
+      },
+      "allergen_summary": {},
+      "price_coverage": 0,
+      "error": "No menu items found with any strategy"
+    },
+    {
+      "restaurant_name": "Blueberry Hill Breakfast Cafe",
+      "url": "https://www.yelp.com/biz/blueberry-hill-breakfast-cafe-chicago",
+      "scraping_success": true,
+      "total_items": 12,
+      "processing_time": 2.43,
+      "extraction_method": "enhanced_css_selectors",
+      "ml_features": {
+        "confidence_scores": [
+          0.5,
+          0.5,
+          0.6,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.6,
+          0.5,
+          0.5
+        ],
+        "allergen_detections": {},
+        "quality_assessment": 0.3,
+        "extraction_strategies_used": [
+          "enhanced_css_selectors"
+        ]
+      },
+      "allergen_summary": {},
+      "price_coverage": 0.0,
+      "error": null
+    },
+    {
+      "restaurant_name": "Alinea",
+      "url": "https://www.yelp.com/biz/alinea-chicago",
+      "scraping_success": false,
+      "total_items": 0,
+      "processing_time": 3.71,
+      "extraction_method": null,
+      "ml_features": {
+        "confidence_scores": [],
+        "allergen_detections": {},
+        "quality_assessment": 0,
+        "extraction_strategies_used": []
+      },
+      "allergen_summary": {},
+      "price_coverage": 0,
+      "error": "No menu items found with any strategy"
+    },
+    {
+      "restaurant_name": "Girl & the Goat",
+      "url": "https://www.yelp.com/biz/girl-and-the-goat-chicago",
+      "scraping_success": false,
+      "total_items": 0,
+      "processing_time": 2.21,
+      "extraction_method": null,
+      "ml_features": {
+        "confidence_scores": [],
+        "allergen_detections": {},
+        "quality_assessment": 0,
+        "extraction_strategies_used": []
+      },
+      "allergen_summary": {},
+      "price_coverage": 0,
+      "error": "No menu items found with any strategy"
+    },
+    {
+      "restaurant_name": "Au Cheval",
+      "url": "https://www.yelp.com/biz/au-cheval-chicago",
+      "scraping_success": false,
+      "total_items": 0,
+      "processing_time": 2.19,
+      "extraction_method": null,
+      "ml_features": {
+        "confidence_scores": [],
+        "allergen_detections": {},
+        "quality_assessment": 0,
+        "extraction_strategies_used": []
+      },
+      "allergen_summary": {},
+      "price_coverage": 0,
+      "error": "No menu items found with any strategy"
+    },
+    {
+      "restaurant_name": "The Purple Pig",
+      "url": "https://www.yelp.com/biz/the-purple-pig-chicago",
+      "scraping_success": false,
+      "total_items": 0,
+      "processing_time": 2.19,
+      "extraction_method": null,
+      "ml_features": {
+        "confidence_scores": [],
+        "allergen_detections": {},
+        "quality_assessment": 0,
+        "extraction_strategies_used": []
+      },
+      "allergen_summary": {},
+      "price_coverage": 0,
+      "error": "No menu items found with any strategy"
+    },
+    {
+      "restaurant_name": "Gibsons Bar & Steakhouse",
+      "url": "https://www.yelp.com/biz/gibsons-bar-and-steakhouse-chicago",
+      "scraping_success": false,
+      "total_items": 0,
+      "processing_time": 2.19,
+      "extraction_method": null,
+      "ml_features": {
+        "confidence_scores": [],
+        "allergen_detections": {},
+        "quality_assessment": 0,
+        "extraction_strategies_used": []
+      },
+      "allergen_summary": {},
+      "price_coverage": 0,
+      "error": "No menu items found with any strategy"
+    },
+    {
+      "restaurant_name": "Pequod's Pizza",
+      "url": "https://www.yelp.com/biz/pequods-pizza-chicago",
+      "scraping_success": false,
+      "total_items": 0,
+      "processing_time": 2.19,
+      "extraction_method": null,
+      "ml_features": {
+        "confidence_scores": [],
+        "allergen_detections": {},
+        "quality_assessment": 0,
+        "extraction_strategies_used": []
+      },
+      "allergen_summary": {},
+      "price_coverage": 0,
+      "error": "No menu items found with any strategy"
+    },
+    {
+      "restaurant_name": "Lou Malnati's Pizzeria",
+      "url": "https://www.yelp.com/biz/lou-malnatis-pizzeria-chicago",
+      "scraping_success": true,
+      "total_items": 12,
+      "processing_time": 3.38,
+      "extraction_method": "enhanced_css_selectors",
+      "ml_features": {
+        "confidence_scores": [
+          0.5,
+          0.5,
+          0.6,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.6,
+          0.5,
+          0.5
+        ],
+        "allergen_detections": {},
+        "quality_assessment": 0.3,
+        "extraction_strategies_used": [
+          "enhanced_css_selectors"
+        ]
+      },
+      "allergen_summary": {},
+      "price_coverage": 0.0,
+      "error": null
+    },
+    {
+      "restaurant_name": "Portillo's",
+      "url": "https://www.yelp.com/biz/portillos-chicago",
+      "scraping_success": true,
+      "total_items": 12,
+      "processing_time": 2.39,
+      "extraction_method": "enhanced_css_selectors",
+      "ml_features": {
+        "confidence_scores": [
+          0.5,
+          0.5,
+          0.6,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.6,
+          0.5,
+          0.5
+        ],
+        "allergen_detections": {},
+        "quality_assessment": 0.3,
+        "extraction_strategies_used": [
+          "enhanced_css_selectors"
+        ]
+      },
+      "allergen_summary": {},
+      "price_coverage": 0.0,
+      "error": null
+    },
+    {
+      "restaurant_name": "The Publican",
+      "url": "https://www.yelp.com/biz/the-publican-chicago",
+      "scraping_success": false,
+      "total_items": 0,
+      "processing_time": 9.0,
+      "extraction_method": null,
+      "ml_features": {
+        "confidence_scores": [],
+        "allergen_detections": {},
+        "quality_assessment": 0,
+        "extraction_strategies_used": []
+      },
+      "allergen_summary": {},
+      "price_coverage": 0,
+      "error": "No menu items found with any strategy"
+    },
+    {
+      "restaurant_name": "Wildberry Pancakes & Cafe",
+      "url": "https://www.yelp.com/biz/wildberry-pancakes-and-cafe-chicago",
+      "scraping_success": false,
+      "total_items": 0,
+      "processing_time": 2.19,
+      "extraction_method": null,
+      "ml_features": {
+        "confidence_scores": [],
+        "allergen_detections": {},
+        "quality_assessment": 0,
+        "extraction_strategies_used": []
+      },
+      "allergen_summary": {},
+      "price_coverage": 0,
+      "error": "No menu items found with any strategy"
+    },
+    {
+      "restaurant_name": "Xoco",
+      "url": "https://www.yelp.com/biz/xoco-chicago",
+      "scraping_success": false,
+      "total_items": 0,
+      "processing_time": 2.19,
+      "extraction_method": null,
+      "ml_features": {
+        "confidence_scores": [],
+        "allergen_detections": {},
+        "quality_assessment": 0,
+        "extraction_strategies_used": []
+      },
+      "allergen_summary": {},
+      "price_coverage": 0,
+      "error": "No menu items found with any strategy"
+    },
+    {
+      "restaurant_name": "Frontera Grill",
+      "url": "https://www.yelp.com/biz/frontera-grill-chicago",
+      "scraping_success": true,
+      "total_items": 12,
+      "processing_time": 2.43,
+      "extraction_method": "enhanced_css_selectors",
+      "ml_features": {
+        "confidence_scores": [
+          0.5,
+          0.5,
+          0.6,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.6,
+          0.5,
+          0.5
+        ],
+        "allergen_detections": {},
+        "quality_assessment": 0.3,
+        "extraction_strategies_used": [
+          "enhanced_css_selectors"
+        ]
+      },
+      "allergen_summary": {},
+      "price_coverage": 0.0,
+      "error": null
+    },
+    {
+      "restaurant_name": "Smoque BBQ",
+      "url": "https://www.yelp.com/biz/smoque-bbq-chicago",
+      "scraping_success": false,
+      "total_items": 0,
+      "processing_time": 2.18,
+      "extraction_method": null,
+      "ml_features": {
+        "confidence_scores": [],
+        "allergen_detections": {},
+        "quality_assessment": 0,
+        "extraction_strategies_used": []
+      },
+      "allergen_summary": {},
+      "price_coverage": 0,
+      "error": "No menu items found with any strategy"
+    },
+    {
+      "restaurant_name": "Kuma's Corner",
+      "url": "https://www.yelp.com/biz/kumas-corner-chicago",
+      "scraping_success": false,
+      "total_items": 0,
+      "processing_time": 2.19,
+      "extraction_method": null,
+      "ml_features": {
+        "confidence_scores": [],
+        "allergen_detections": {},
+        "quality_assessment": 0,
+        "extraction_strategies_used": []
+      },
+      "allergen_summary": {},
+      "price_coverage": 0,
+      "error": "No menu items found with any strategy"
+    },
+    {
+      "restaurant_name": "The Gage",
+      "url": "https://www.yelp.com/biz/the-gage-chicago",
+      "scraping_success": false,
+      "total_items": 0,
+      "processing_time": 2.25,
+      "extraction_method": null,
+      "ml_features": {
+        "confidence_scores": [],
+        "allergen_detections": {},
+        "quality_assessment": 0,
+        "extraction_strategies_used": []
+      },
+      "allergen_summary": {},
+      "price_coverage": 0,
+      "error": "No menu items found with any strategy"
+    }
+  ]
+}
