@@ -2,7 +2,43 @@
 
 A comprehensive web scraping solution for extracting restaurant menu data using Playwright. This project includes multiple scraper implementations with advanced features like OCR integration, machine learning enhancement, and optimized content detection.
 
-## 🚀 Features
+## 🆕 Phase 1 Improvements (Latest)
+
+**Enhanced Yelp Detection & Official Website Fallback**
+
+- **🔍 Enhanced Yelp Menu Detection**: Comprehensive price extraction patterns and improved dynamic content handling with Yelp-specific scrolling strategies
+- **🌐 Restaurant Website Discovery**: Google search integration to automatically find official restaurant websites
+- **🔄 Intelligent Fallback Logic**: When primary URL (e.g., Yelp) yields insufficient results, automatically falls back to scraping the discovered official website
+- **📈 Improved Content Handling**: Enhanced dynamic content waiting and better navigation for modern restaurant websites
+- **🎯 Better Extraction Coverage**: Combines results from multiple sources for comprehensive menu data
+
+### Quick Demo of Phase 1 Features
+
+```python
+from enhanced_dynamic_scraper import EnhancedDynamicScraper
+import asyncio
+
+async def demo_phase1():
+    scraper = EnhancedDynamicScraper(headless=True)
+    await scraper.setup_browser()
+    
+    # New extract_menu_items method with fallback logic
+    result = await scraper.extract_menu_items(
+        url="https://www.yelp.com/biz/restaurant-name",
+        restaurant_name="Restaurant Name"
+    )
+    
+    print(f"Primary extraction: {result['total_items']} items")
+    if result.get('fallback_url'):
+        print(f"Fallback used: {result['fallback_url']}")
+    
+    await scraper.cleanup()
+
+# Run Phase 1 demo
+python demo_phase1.py
+```
+
+## 🚀 Core Features
 
 - **Multiple Scraper Implementations**: From basic to advanced ML-enhanced scrapers
 - **Smart Content Detection**: Intelligent menu content identification and extraction
@@ -196,6 +232,12 @@ price_patterns = [
 ### Run Comprehensive Tests
 
 ```bash
+# Test Phase 1 improvements (NEW)
+python test_phase1_improvements.py
+
+# Quick Phase 1 demo (NEW)
+python demo_phase1.py
+
 # Test enhanced scraper
 python test_enhanced_dynamic_scraper.py
 
@@ -205,6 +247,15 @@ python test_ml_enhanced_scraper.py
 # Test production scraper
 python test_production_scraper.py
 ```
+
+### Phase 1 Testing Features
+
+The new Phase 1 test suite (`test_phase1_improvements.py`) provides:
+- **Fallback Logic Testing**: Validates automatic website discovery and fallback scraping
+- **Enhanced Yelp Detection**: Tests improved price extraction and dynamic content handling
+- **Performance Metrics**: Detailed analytics on extraction methods and success rates
+- **Comprehensive Reporting**: JSON output with detailed results and performance data
+- **Multi-Restaurant Testing**: Tests across various restaurant types and platforms
 
 ### Performance Metrics
 

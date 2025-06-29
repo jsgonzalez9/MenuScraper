@@ -169,6 +169,16 @@ class EnhancedDynamicScraper:
             r'\bdelivery\b',
             r'\btakeout\b'
         ]
+        
+        # Enhanced price extraction patterns for Yelp and other sites
+        self.enhanced_price_patterns = [
+            r'\$([0-9]+(?:\.[0-9]{2})?)',  # Standard $X.XX format
+            r'([0-9]+(?:\.[0-9]{2})?)\s*\$',  # X.XX$ format
+            r'Price[:\s]*\$?([0-9]+(?:\.[0-9]{2})?)',  # Price: $X.XX
+            r'Cost[:\s]*\$?([0-9]+(?:\.[0-9]{2})?)',   # Cost: $X.XX
+            r'\$([0-9]+)\s*-\s*\$([0-9]+)',  # Price range $X-$Y
+            r'([0-9]+)\s*-\s*([0-9]+)\s*\$',  # Range X-Y$
+        ]
     
     async def setup_browser(self) -> bool:
         """Setup browser with enhanced stealth and performance features"""
@@ -250,28 +260,54 @@ class EnhancedDynamicScraper:
             print(f"Enhanced navigation error: {e}")
             return False
     
-    async def _wait_for_dynamic_content(self, page: Page) -> None:
-        """Wait for dynamic content to load using multiple strategies"""
+    async def _wait_for_dynamic_content(self, page: Page, is_yelp: bool = False) -> None:
+        """Wait for dynamic content to load using multiple strategies with Yelp-specific handling"""
         try:
-            # Try multiple wait strategies
-            for strategy in self.wait_strategies:
-                try:
-                    await page.wait_for_function(
-                        strategy,
-                        timeout=10000
-                    )
-                    break  # If one succeeds, we're good
-                except:
-                    continue
-            
-            # Additional wait for JavaScript execution
-            await asyncio.sleep(3)
-            
-            # Scroll to trigger lazy loading
-            await page.evaluate("window.scrollTo(0, document.body.scrollHeight / 2)")
-            await asyncio.sleep(1)
-            await page.evaluate("window.scrollTo(0, 0)")
-            await asyncio.sleep(1)
+            # Enhanced wait for Yelp pages
+            if is_yelp:
+                # Wait for Yelp-specific elements
+                yelp_strategies = [
+                    "document.querySelectorAll('[data-testid]').length > 10",
+                    "document.querySelectorAll('[class*=\"menu\"]').length > 0",
+                    "document.body.innerText.includes('Menu') || document.body.innerText.includes('$')",
+                    "document.querySelectorAll('*').length > 200"
+                ]
+                
+                for strategy in yelp_strategies:
+                    try:
+                        await page.wait_for_function(strategy, timeout=15000)
+                        break
+                    except:
+                        continue
+                
+                # Enhanced scrolling for Yelp lazy loading
+                await asyncio.sleep(2)
+                await page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
+                await asyncio.sleep(2)
+                await page.evaluate("window.scrollTo(0, document.body.scrollHeight / 2)")
+                await asyncio.sleep(2)
+                await page.evaluate("window.scrollTo(0, 0)")
+                await asyncio.sleep(2)
+            else:
+                # Try multiple wait strategies for non-Yelp sites
+                for strategy in self.wait_strategies:
+                    try:
+                        await page.wait_for_function(
+                            strategy,
+                            timeout=10000
+                        )
+                        break  # If one succeeds, we're good
+                    except:
+                        continue
+                
+                # Additional wait for JavaScript execution
+                await asyncio.sleep(3)
+                
+                # Scroll to trigger lazy loading
+                await page.evaluate("window.scrollTo(0, document.body.scrollHeight / 2)")
+                await asyncio.sleep(1)
+                await page.evaluate("window.scrollTo(0, 0)")
+                await asyncio.sleep(1)
             
         except Exception as e:
             print(f"Dynamic content wait failed: {e}")
@@ -373,27 +409,199 @@ class EnhancedDynamicScraper:
         except Exception:
             return []
     
-    async def extract_menu_enhanced(self, page: Page) -> List[Dict[str, Any]]:
-        """Enhanced menu extraction with multiple strategies"""
+    async def _find_restaurant_website(self, restaurant_name: str) -> Optional[str]:
+        """Find restaurant's official website using Google search"""
+        try:
+            page = await self.context.new_page()
+            
+            # Search for restaurant's official website
+            search_query = f"{restaurant_name} restaurant official website"
+            google_url = f"https://www.google.com/search?q={search_query.replace(' ', '+')}"
+            
+            await page.goto(google_url, timeout=30000)
+            await asyncio.sleep(2)
+            
+            # Look for search result links
+            search_results = await page.query_selector_all('a[href]')
+            
+            for result in search_results[:10]:  # Check first 10 results
+                try:
+                    href = await result.get_attribute('href')
+                    if href and self._is_likely_restaurant_website(href, restaurant_name):
+                        await page.close()
+                        return href
+                except:
+                    continue
+            
+            await page.close()
+            return None
+            
+        except Exception as e:
+            print(f"Website discovery error: {e}")
+            return None
+    
+    def _is_likely_restaurant_website(self, url: str, restaurant_name: str) -> bool:
+        """Check if URL is likely the restaurant's official website"""
+        if not url or url.startswith('javascript:') or '#' in url:
+            return False
+        
+        # Exclude common non-restaurant domains
+        excluded_domains = [
+            'google.com', 'yelp.com', 'facebook.com', 'instagram.com',
+            'tripadvisor.com', 'zomato.com', 'grubhub.com', 'doordash.com',
+            'ubereats.com', 'seamless.com', 'opentable.com', 'wikipedia.org'
+        ]
+        
+        url_lower = url.lower()
+        for domain in excluded_domains:
+            if domain in url_lower:
+                return False
+        
+        # Check if restaurant name appears in URL
+        name_words = restaurant_name.lower().split()
+        for word in name_words:
+            if len(word) > 3 and word in url_lower:
+                return True
+        
+        return False
+    
+    async def _scrape_single_url(self, url: str, is_yelp: bool = False) -> List[Dict[str, Any]]:
+        """Scrape menu items from a single URL with enhanced strategies"""
+        try:
+            page = await self.context.new_page()
+            
+            # Navigate with appropriate handling
+            await page.goto(url, wait_until='networkidle', timeout=self.timeout)
+            
+            # Wait for dynamic content with Yelp-specific handling
+            await self._wait_for_dynamic_content(page, is_yelp)
+            
+            # Enhanced menu extraction
+            menu_items = await self.extract_menu_enhanced(page, is_yelp)
+            
+            await page.close()
+            return menu_items
+            
+        except Exception as e:
+            print(f"Single URL scraping error for {url}: {e}")
+            return []
+    
+    async def extract_menu_items(self, url: str, restaurant_name: str = "") -> Dict[str, Any]:
+        """Main extraction method with official website fallback"""
+        start_time = time.time()
+        
+        result = {
+            'restaurant_name': restaurant_name or 'Unknown',
+            'primary_url': url,
+            'fallback_url': None,
+            'scraping_success': False,
+            'total_items': 0,
+            'processing_time': 0,
+            'extraction_method': None,
+            'items': [],
+            'error': None
+        }
+        
+        try:
+            # Determine if primary URL is Yelp
+            is_yelp = 'yelp.com' in url.lower()
+            
+            # Step 1: Try scraping the primary URL (e.g., Yelp)
+            print(f"🔍 Scraping primary URL: {url}")
+            primary_items = await self._scrape_single_url(url, is_yelp)
+            
+            # Check if primary scraping was sufficient
+            if len(primary_items) >= 5:  # Sufficient items found
+                result.update({
+                    'scraping_success': True,
+                    'total_items': len(primary_items),
+                    'items': primary_items,
+                    'extraction_method': 'primary_url'
+                })
+                print(f"✅ Primary URL yielded {len(primary_items)} items")
+            else:
+                print(f"⚠️ Primary URL yielded only {len(primary_items)} items, trying fallback...")
+                
+                # Step 2: Find and scrape official website
+                if restaurant_name:
+                    official_website = await self._find_restaurant_website(restaurant_name)
+                    
+                    if official_website:
+                        print(f"🔍 Found official website: {official_website}")
+                        result['fallback_url'] = official_website
+                        
+                        fallback_items = await self._scrape_single_url(official_website, False)
+                        
+                        # Combine results, prioritizing fallback if better
+                        if len(fallback_items) > len(primary_items):
+                            result.update({
+                                'scraping_success': True,
+                                'total_items': len(fallback_items),
+                                'items': fallback_items,
+                                'extraction_method': 'fallback_website'
+                            })
+                            print(f"✅ Fallback website yielded {len(fallback_items)} items")
+                        else:
+                            # Use primary items if fallback didn't improve
+                            all_items = primary_items + fallback_items
+                            unique_items = self._remove_duplicates(all_items)
+                            result.update({
+                                'scraping_success': len(unique_items) > 0,
+                                'total_items': len(unique_items),
+                                'items': unique_items,
+                                'extraction_method': 'combined'
+                            })
+                            print(f"✅ Combined results: {len(unique_items)} items")
+                    else:
+                        # No official website found, use primary results
+                        result.update({
+                            'scraping_success': len(primary_items) > 0,
+                            'total_items': len(primary_items),
+                            'items': primary_items,
+                            'extraction_method': 'primary_url_only'
+                        })
+                        print(f"⚠️ No official website found, using {len(primary_items)} items from primary URL")
+                else:
+                    # No restaurant name for website discovery
+                    result.update({
+                        'scraping_success': len(primary_items) > 0,
+                        'total_items': len(primary_items),
+                        'items': primary_items,
+                        'extraction_method': 'primary_url_only'
+                    })
+            
+            if not result['scraping_success']:
+                result['error'] = 'No valid menu items found with enhanced strategies and fallback'
+                
+        except Exception as e:
+            result['error'] = f'Enhanced extraction error: {str(e)}'
+        
+        finally:
+            result['processing_time'] = round(time.time() - start_time, 2)
+        
+        return result
+    
+    async def extract_menu_enhanced(self, page: Page, is_yelp: bool = False) -> List[Dict[str, Any]]:
+        """Enhanced menu extraction with multiple strategies and Yelp-specific handling"""
         all_items = []
         
         try:
-            # Strategy 1: Enhanced CSS selectors
-            items = await self._extract_with_enhanced_selectors(page)
+            # Strategy 1: Enhanced CSS selectors with Yelp-specific patterns
+            items = await self._extract_with_enhanced_selectors(page, is_yelp)
             if items:
                 all_items.extend(items)
                 print(f"✅ Enhanced selectors found {len(items)} items")
             
-            # Strategy 2: Text-based extraction
+            # Strategy 2: Text-based extraction with enhanced price patterns
             if len(all_items) < 5:
-                text_items = await self._extract_with_text_analysis(page)
+                text_items = await self._extract_with_text_analysis(page, is_yelp)
                 if text_items:
                     all_items.extend(text_items)
                     print(f"✅ Text analysis found {len(text_items)} items")
             
-            # Strategy 3: Price-based extraction
+            # Strategy 3: Enhanced price-based extraction
             if len(all_items) < 3:
-                price_items = await self._extract_with_price_detection(page)
+                price_items = await self._extract_with_price_detection(page, is_yelp)
                 if price_items:
                     all_items.extend(price_items)
                     print(f"✅ Price detection found {len(price_items)} items")
@@ -408,11 +616,27 @@ class EnhancedDynamicScraper:
             print(f"Menu extraction error: {e}")
             return []
     
-    async def _extract_with_enhanced_selectors(self, page: Page) -> List[Dict[str, Any]]:
-        """Extract menu items using enhanced CSS selectors"""
+    async def _extract_with_enhanced_selectors(self, page: Page, is_yelp: bool = False) -> List[Dict[str, Any]]:
+        """Extract menu items using enhanced CSS selectors with Yelp-specific patterns"""
         items = []
         
-        for selector in self.enhanced_selectors:
+        # Add Yelp-specific selectors if needed
+        selectors_to_use = self.enhanced_selectors.copy()
+        if is_yelp:
+            yelp_selectors = [
+                '[data-testid*="menu"]',
+                '[data-testid*="food"]',
+                '[data-testid*="item"]',
+                '[class*="menuItem"]',
+                '[class*="food-item"]',
+                '[class*="dish-name"]',
+                'div[class*="arrange"] div[class*="border"]',
+                'section[aria-label*="menu"] div',
+                'ul[class*="menu"] li',
+            ]
+            selectors_to_use = yelp_selectors + selectors_to_use
+        
+        for selector in selectors_to_use:
             try:
                 elements = await page.query_selector_all(selector)
                 
@@ -420,7 +644,7 @@ class EnhancedDynamicScraper:
                     try:
                         text = await element.inner_text()
                         if text and len(text.strip()) > 3:
-                            item = self._parse_menu_item_text(text.strip())
+                            item = self._parse_menu_item_text(text.strip(), is_yelp)
                             if item:
                                 item['extraction_method'] = 'enhanced_css_selectors'
                                 item['selector_used'] = selector
@@ -436,8 +660,8 @@ class EnhancedDynamicScraper:
         
         return items
     
-    async def _extract_with_text_analysis(self, page: Page) -> List[Dict[str, Any]]:
-        """Extract menu items using enhanced text analysis"""
+    async def _extract_with_text_analysis(self, page: Page, is_yelp: bool = False) -> List[Dict[str, Any]]:
+        """Extract menu items using enhanced text analysis with improved price detection"""
         try:
             # Get all text content
             text_content = await page.evaluate("document.body.innerText")
@@ -450,9 +674,9 @@ class EnhancedDynamicScraper:
                 if len(line) < 5 or len(line) > 300:
                     continue
                 
-                # Enhanced item scoring
-                if self._is_likely_menu_item(line):
-                    item = self._parse_menu_item_text(line)
+                # Enhanced item scoring with improved price detection
+                if self._is_likely_menu_item(line, is_yelp):
+                    item = self._parse_menu_item_text(line, is_yelp)
                     if item:
                         item['extraction_method'] = 'text_analysis'
                         items.append(item)
@@ -463,13 +687,13 @@ class EnhancedDynamicScraper:
             print(f"Text analysis error: {e}")
             return []
     
-    async def _extract_with_price_detection(self, page: Page) -> List[Dict[str, Any]]:
-        """Extract menu items by detecting price patterns"""
+    async def _extract_with_price_detection(self, page: Page, is_yelp: bool = False) -> List[Dict[str, Any]]:
+        """Extract menu items by detecting enhanced price patterns"""
         try:
             # Get all text content and find elements with price patterns
             text_content = await page.evaluate("document.body.innerText")
             
-            # Find all elements that might contain prices
+            # Enhanced price selectors with Yelp-specific patterns
             price_selectors = [
                 '[class*="price"]',
                 '[class*="cost"]', 
@@ -480,6 +704,16 @@ class EnhancedDynamicScraper:
                 'p'
             ]
             
+            if is_yelp:
+                yelp_price_selectors = [
+                    '[class*="priceRange"]',
+                    '[class*="pricing"]',
+                    '[data-testid*="pricing"]',
+                    'span[class*="dollar"]',
+                    'div[class*="cost"]'
+                ]
+                price_selectors = yelp_price_selectors + price_selectors
+            
             items = []
             for selector in price_selectors:
                 try:
@@ -487,10 +721,10 @@ class EnhancedDynamicScraper:
                     for element in elements:
                         try:
                             text = await element.inner_text()
-                            if text and '$' in text and len(text.strip()) > 3:
-                                item = self._parse_menu_item_text(text.strip())
+                            if text and self._has_enhanced_price_pattern(text) and len(text.strip()) > 3:
+                                item = self._parse_menu_item_text(text.strip(), is_yelp)
                                 if item:
-                                    item['extraction_method'] = 'price_detection'
+                                    item['extraction_method'] = 'enhanced_price_detection'
                                     items.append(item)
                         except:
                             continue
@@ -500,11 +734,18 @@ class EnhancedDynamicScraper:
             return items
             
         except Exception as e:
-            print(f"Price detection error: {e}")
+            print(f"Enhanced price detection error: {e}")
             return []
     
-    def _is_likely_menu_item(self, text: str) -> bool:
-        """Enhanced menu item likelihood detection"""
+    def _has_enhanced_price_pattern(self, text: str) -> bool:
+        """Check if text contains enhanced price patterns"""
+        for pattern in self.enhanced_price_patterns:
+            if re.search(pattern, text):
+                return True
+        return False
+    
+    def _is_likely_menu_item(self, text: str, is_yelp: bool = False) -> bool:
+        """Enhanced menu item likelihood detection with Yelp-specific logic"""
         text_lower = text.lower()
         
         # Must have some food-related content
@@ -516,37 +757,62 @@ class EnhancedDynamicScraper:
         ]
         
         has_food_indicator = any(indicator in text_lower for indicator in food_indicators)
-        has_price = bool(re.search(r'\$\d+', text))
+        has_price = self._has_enhanced_price_pattern(text)
         reasonable_length = 10 <= len(text) <= 200
         
-        # Score-based decision
+        # Score-based decision with Yelp adjustments
         score = 0
         if has_food_indicator: score += 3
         if has_price: score += 4
         if reasonable_length: score += 1
         
+        # Yelp-specific adjustments
+        if is_yelp:
+            # Lower threshold for Yelp since content might be more fragmented
+            return score >= 3
+        
         return score >= 4
     
-    def _parse_menu_item_text(self, text: str) -> Optional[Dict[str, Any]]:
-        """Enhanced menu item text parsing"""
+    def _parse_menu_item_text(self, text: str, is_yelp: bool = False) -> Optional[Dict[str, Any]]:
+        """Enhanced menu item text parsing with improved price extraction"""
         try:
-            # Extract price
-            price_match = re.search(r'\$([\d,]+(?:\.\d{2})?)', text)
-            price = float(price_match.group(1).replace(',', '')) if price_match else None
+            # Enhanced price extraction using multiple patterns
+            price = None
+            for pattern in self.enhanced_price_patterns:
+                match = re.search(pattern, text)
+                if match:
+                    try:
+                        # Handle different capture groups
+                        if len(match.groups()) >= 1:
+                            price_str = match.group(1).replace(',', '')
+                            price = float(price_str)
+                            break
+                    except (ValueError, IndexError):
+                        continue
             
             # Clean item name (remove price and common suffixes)
-            name = re.sub(r'\$[\d,]+(?:\.\d{2})?', '', text).strip()
+            name = text
+            for pattern in self.enhanced_price_patterns:
+                name = re.sub(pattern, '', name)
+            name = name.strip()
             name = re.sub(r'\s*\([^)]*\)\s*$', '', name).strip()  # Remove trailing parentheses
             
             if len(name) < 3:
                 return None
             
             # Extract description (text after name, before price)
-            description_match = re.search(r'^([^$]+?)\s*\$', text)
-            description = description_match.group(1).strip() if description_match else name
+            description = None
+            for pattern in self.enhanced_price_patterns:
+                desc_match = re.search(f'^([^$]+?)\s*{pattern}', text)
+                if desc_match:
+                    description = desc_match.group(1).strip()
+                    break
+            
+            if not description:
+                description = name
             
             # Basic categorization
-            category = self._categorize_item(name + ' ' + description)
+            category = self._categorize_item(name + ' ' + (description or ''))
             
             return {
                 'name': name,
@@ -671,50 +937,16 @@ class EnhancedDynamicScraper:
         return unique_items
     
     async def scrape_restaurant_enhanced(self, restaurant_data: Dict[str, Any]) -> Dict[str, Any]:
-        """Enhanced restaurant scraping with comprehensive error handling"""
-        start_time = time.time()
+        """Enhanced restaurant scraping with fallback capabilities"""
+        restaurant_name = restaurant_data.get('name', 'Unknown')
+        url = restaurant_data.get('url', '')
         
-        result = {
-            'restaurant_name': restaurant_data.get('name', 'Unknown'),
-            'url': restaurant_data.get('url', ''),
-            'scraping_success': False,
-            'total_items': 0,
-            'processing_time': 0,
-            'extraction_method': None,
-            'items': [],
-            'error': None
-        }
+        # Use the new extract_menu_items method with fallback logic
+        result = await self.extract_menu_items(url, restaurant_name)
         
-        try:
-            page = await self.context.new_page()
-            
-            # Enhanced navigation
-            navigation_success = await self.smart_navigate_enhanced(page, restaurant_data['url'])
-            
-            if not navigation_success:
-                result['error'] = 'Enhanced navigation failed'
-                return result
-            
-            # Enhanced menu extraction
-            menu_items = await self.extract_menu_enhanced(page)
-            
-            if menu_items:
-                result.update({
-                    'scraping_success': True,
-                    'total_items': len(menu_items),
-                    'items': menu_items,
-                    'extraction_method': menu_items[0].get('extraction_method', 'unknown')
-                })
-            else:
-                result['error'] = 'No menu items found with enhanced strategies'
-            
-            await page.close()
-            
-        except Exception as e:
-            result['error'] = f'Enhanced scraping error: {str(e)}'
-        
-        finally:
-            result['processing_time'] = round(time.time() - start_time, 2)
+        # Ensure backward compatibility with expected result format
+        if 'url' not in result:
+            result['url'] = url
         
         return result
     
