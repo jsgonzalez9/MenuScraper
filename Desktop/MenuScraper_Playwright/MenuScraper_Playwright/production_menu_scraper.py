@@ -80,10 +80,13 @@ class ProductionMenuScraper:
         
         # Price extraction patterns
         self.price_patterns = [
-            r'\$\d+\.\d{2}',  # $12.99
-            r'\$\d+',         # $12
-            r'\d+\.\d{2}',    # 12.99
-            r'Price:\s*\$?\d+(?:\.\d{2})?'  # Price: $12.99
+            r'\$\s*\d{1,3}(?:,\d{3})*(?:\.\d{2})?',  # $12.99 or $ 12.99 or $1,234.56
+            r'\d{1,3}(?:,\d{3})*(?:\.\d{2})?\s*\$',  # 12.99$ or 1,234.56$
+            r'USD\s*\d{1,3}(?:,\d{3})*(?:\.\d{2})?', # USD 12.99 or USD 1,234.56
+            r'\$\d+',                               # $12 (integer)
+            r'\d+\.\d{2}',                          # 12.99 (no currency symbol)
+            r'\d+\s*dollars?',                      # 12 dollars
+            r'Price:\s*\$?\d+(?:\.\d{2})?'          # Price: $12.99
         ]
     
     async def setup_browser(self) -> bool:
@@ -106,9 +109,27 @@ class ProductionMenuScraper:
             )
             
             # Create page with enhanced settings
-            self.page = await self.browser.new_page()
+            context = await self.browser.new_context(
+                user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                viewport={'width': 1920, 'height': 1080},
+                # java_script_enabled=True, # Already default
+                # accept_downloads=False, # Default
+            )
+            self.page = await context.new_page()
+
+            # Set additional headers that are common in browsers
+            await self.page.set_extra_http_headers({
+                'Accept-Language': 'en-US,en;q=0.9',
+                'Accept-Encoding': 'gzip, deflate, br',
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+                'Sec-Fetch-Site': 'none',
+                'Sec-Fetch-Mode': 'navigate',
+                'Sec-Fetch-User': '?1',
+                'Sec-Fetch-Dest': 'document',
+                'Upgrade-Insecure-Requests': '1'
+            })
             
-            # Set realistic viewport
+            # Set realistic viewport (already set in new_context, but doesn't hurt to ensure)
             await self.page.set_viewport_size({"width": 1920, "height": 1080})
             
             # Add stealth scripts
@@ -132,7 +153,90 @@ class ProductionMenuScraper:
         except Exception as e:
             logger.error(f"❌ Browser setup failed: {e}")
             return False
-    
+
+    async def extract_menu_items(self, url: str, restaurant_name: Optional[str] = None, city_state: Optional[str] = None) -> Dict[str, Any]:
+        """
+        Extract menu items from a given URL.
+        If initial extraction is poor and restaurant_name is provided,
+        attempts to find and scrape the official restaurant website.
+        """
+        start_time = time.time()
+        final_result = {
+            'url': url, # Initial URL
+            'success': False,
+            'items': [],
+            'total_items': 0,
+            'processing_time': 0,
+            'extraction_method': None,
+            'allergen_summary': {},
+            'price_coverage': 0,
+            'error': None,
+            'scraped_source': 'primary_url' # Indicates if data is from primary or official_site
+        }
+
+        # Attempt 1: Scrape the provided URL
+        logger.info(f"Attempting to scrape primary URL: {url}")
+        primary_scrape_result = await self._scrape_single_url(url, is_official_site=False)
+
+        final_result.update({
+            'success': primary_scrape_result['success'],
+            'items': primary_scrape_result['items'],
+            'total_items': primary_scrape_result['total_items'],
+            'extraction_method': primary_scrape_result['extraction_method'],
+            'error': primary_scrape_result['error']
+        })
+
+        # Condition to try official website: primary scrape not very successful AND name is provided
+        MIN_ITEMS_THRESHOLD = 3 # If primary scrape finds less than this, try official site
+        should_try_official_site = (
+            restaurant_name and
+            (not final_result['success'] or final_result['total_items'] < MIN_ITEMS_THRESHOLD)
+        )
+
+        if should_try_official_site:
+            logger.info(f"Primary URL scrape yielded {final_result['total_items']} items. Attempting to find and scrape official website for '{restaurant_name}'.")
+            official_site_url = await self._find_restaurant_website(restaurant_name, city_state)
+
+            if official_site_url and official_site_url != url: # Ensure it's a new, valid URL
+                logger.info(f"Found potential official website: {official_site_url}. Scraping it now.")
+                official_scrape_result = await self._scrape_single_url(official_site_url, is_official_site=True)
+
+                # If official site scrape is better or primary failed, use official site data
+                if official_scrape_result['success'] and \
+                   (not final_result['success'] or official_scrape_result['total_items'] > final_result['total_items']):
+                    logger.info(f"Official website scrape was more successful. Using its data.")
+                    final_result.update({
+                        'success': official_scrape_result['success'],
+                        'items': official_scrape_result['items'],
+                        'total_items': official_scrape_result['total_items'],
+                        'extraction_method': official_scrape_result['extraction_method'],
+                        'error': official_scrape_result['error'], # Could be None if successful
+                        'scraped_source': 'official_site',
+                        'url': official_site_url # Update URL to the one actually scraped
+                    })
+                elif official_scrape_result['success']:
+                     logger.info(f"Official website scrape was successful but yielded fewer or same items ({official_scrape_result['total_items']}) than primary ({final_result['total_items']}). Keeping primary URL data.")
+                else:
+                    logger.warning(f"Official website scrape failed. Keeping primary URL data. Error: {official_scrape_result.get('error')}")
+            elif official_site_url == url:
+                logger.info("Official website found is the same as the primary URL. No secondary scrape needed.")
+            else:
+                logger.info(f"Could not find a different official website for '{restaurant_name}'. Sticking with primary URL data.")
+
+        # Final calculations for allergens and price coverage based on the chosen item list
+        if final_result['items']:
+            final_result['allergen_summary'] = self._summarize_allergens(final_result['items'])
+            final_result['price_coverage'] = self._calculate_price_coverage(final_result['items'])
+
+        final_result['processing_time'] = round(time.time() - start_time, 2)
+
+        if final_result['success']:
+            logger.info(f"Extraction complete for {final_result['url']} ({final_result['scraped_source']}). Items: {final_result['total_items']}.")
+        else:
+            logger.warning(f"Extraction failed for {final_result['url']} ({final_result['scraped_source']}). Error: {final_result.get('error')}")
+
+        return final_result
+
     async def navigate_with_retry(self, url: str, max_retries: int = 3) -> bool:
         """Navigate to URL with retry logic and bot detection handling"""
         for attempt in range(max_retries):
@@ -145,13 +249,14 @@ class ProductionMenuScraper:
                 # Navigate with timeout
                 response = await self.page.goto(
                     url, 
-                    wait_until='domcontentloaded',
+                    wait_until='commit', # Faster initial load, then wait for ready state
                     timeout=self.timeout
                 )
                 
                 if response and response.status == 200:
-                    # Wait for content to load
-                    await asyncio.sleep(random.uniform(2, 4))
+                    # Wait for the page to be fully loaded
+                    await self.page.wait_for_function("document.readyState === 'complete'", timeout=self.timeout / 2)
+                    await asyncio.sleep(random.uniform(1, 2)) # Additional small random delay
                     
                     # Check for bot detection
                     content = await self.page.content()
@@ -185,99 +290,110 @@ class ProductionMenuScraper:
         content_lower = content.lower()
         return any(indicator in content_lower for indicator in bot_indicators)
     
-    async def extract_menu_items(self, url: str) -> Dict[str, Any]:
-        """Extract menu items with enhanced strategies"""
-        start_time = time.time()
-        result = {
-            'url': url,
+    # The duplicated extract_menu_items method (lines 260-368) has been removed.
+    # The correct one is at line 139.
+    # The _scrape_single_url method (lines 370-477) now contains the core scraping logic.
+
+    async def _scrape_single_url(self, url: str, is_official_site: bool = False) -> Dict[str, Any]:
+        """Helper function to scrape a single URL, used by extract_menu_items."""
+        # This is essentially the body of the original extract_menu_items,
+        # refactored to be callable for both primary and official website URLs.
+        partial_result = {
             'success': False,
             'items': [],
             'total_items': 0,
-            'processing_time': 0,
             'extraction_method': None,
-            'allergen_summary': {},
-            'price_coverage': 0,
             'error': None
+            # Note: 'url' and 'processing_time' will be handled by the caller
         }
-        
+
         try:
-            # Navigate to the page
             if not await self.navigate_with_retry(url):
-                result['error'] = 'Navigation failed'
-                return result
-            
-            # Get page content
+                partial_result['error'] = 'Navigation failed'
+                return partial_result
+
+            # --- Dynamic content handling (Yelp-specific or generic) ---
+            if "yelp.com" in url and not is_official_site: # Apply Yelp specific only if it's Yelp and not an official site mistaken as Yelp
+                logger.info(f"Applying Yelp-specific dynamic content handling for {url}")
+                try:
+                    for _ in range(3): # Scroll a few times
+                        await self.page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
+                        await asyncio.sleep(random.uniform(0.5, 1.5))
+                except Exception as e:
+                    logger.warning(f"Error during scrolling on Yelp page: {e}")
+            elif is_official_site: # Generic scrolling for official sites
+                logger.info(f"Applying generic scrolling for official site {url}")
+                try:
+                    for _ in range(2): # Scroll a bit less aggressively
+                        await self.page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
+                        await asyncio.sleep(random.uniform(0.5, 1.0))
+                except Exception as e:
+                    logger.warning(f"Error during scrolling on official site: {e}")
+            # --- End dynamic content handling ---
+
             content = await self.page.content()
             soup = BeautifulSoup(content, 'html.parser')
             
-            # Try multiple extraction strategies
             items = []
             extraction_method = None
             
-            # Strategy 1: CSS Selectors (most successful in Enhanced Scraper)
-            for selector in self.menu_selectors:
+            for selector in self.menu_selectors: # Uses the class's menu_selectors
                 try:
                     elements = await self.page.query_selector_all(selector)
                     if elements and len(elements) > 0:
-                        logger.info(f"📋 Found {len(elements)} items with selector: {selector}")
-                        
-                        for element in elements[:20]:  # Limit to prevent overwhelming
+                        logger.info(f"Found {len(elements)} potential items with selector: {selector} on {url}")
+                        current_items = []
+                        for element in elements[:30]: # Increased limit slightly
                             item_data = await self._extract_item_data(element)
                             if item_data and self._is_valid_menu_item(item_data):
-                                items.append(item_data)
+                                current_items.append(item_data)
                         
-                        if items:
+                        if current_items:
+                            items.extend(current_items) # Use extend to accumulate from multiple selectors if needed (though loop breaks)
                             extraction_method = f'css_selector: {selector}'
-                            break
+                            logger.info(f"Extracted {len(current_items)} items using {selector} on {url}")
+                            if len(items) > 5 : # If a selector yields good results, break early
+                                break
                             
                 except Exception as e:
-                    logger.debug(f"Selector {selector} failed: {e}")
+                    logger.debug(f"Selector {selector} failed on {url}: {e}")
                     continue
             
-            # Strategy 2: Text Pattern Extraction (fallback)
             if not items:
+                logger.info(f"CSS selectors yielded no items on {url}. Trying text patterns.")
                 items = self._extract_by_text_patterns(soup)
                 if items:
                     extraction_method = 'text_patterns'
             
-            # Strategy 3: Structured Data (JSON-LD, microdata)
             if not items:
+                logger.info(f"Text patterns yielded no items on {url}. Trying structured data.")
                 items = self._extract_structured_data(soup)
                 if items:
                     extraction_method = 'structured_data'
             
-            # Process results
             if items:
-                # Remove duplicates and clean data
                 unique_items = self._deduplicate_items(items)
-                
-                # Add allergen detection
                 for item in unique_items:
                     item['allergens'] = self._detect_allergens(item.get('description', '') + ' ' + item.get('name', ''))
                 
-                result.update({
+                partial_result.update({
                     'success': True,
                     'items': unique_items,
                     'total_items': len(unique_items),
                     'extraction_method': extraction_method,
-                    'allergen_summary': self._summarize_allergens(unique_items),
-                    'price_coverage': self._calculate_price_coverage(unique_items)
+                    # Allergen summary & price coverage will be calculated on the final item list
                 })
-                
-                logger.info(f"✅ Successfully extracted {len(unique_items)} menu items")
+                logger.info(f"Successfully extracted {len(unique_items)} menu items from {url}")
             else:
-                result['error'] = 'No menu items found'
-                logger.warning("⚠️ No menu items extracted")
+                partial_result['error'] = 'No menu items found'
+                logger.warning(f"No menu items extracted from {url}")
                 
         except Exception as e:
-            result['error'] = str(e)
-            logger.error(f"❌ Extraction failed: {e}")
+            partial_result['error'] = str(e)
+            logger.error(f"Extraction from {url} failed: {e}")
         
-        finally:
-            result['processing_time'] = round(time.time() - start_time, 2)
-        
-        return result
-    
+        return partial_result
+
     async def _extract_item_data(self, element) -> Optional[Dict[str, Any]]:
         """Extract data from a menu item element"""
         try:
@@ -479,6 +595,70 @@ class ProductionMenuScraper:
         
         items_with_price = sum(1 for item in items if item.get('price'))
         return round((items_with_price / len(items)) * 100, 1)
+
+    async def _find_restaurant_website(self, restaurant_name: str, city_state: Optional[str] = None) -> Optional[str]:
+        """Attempt to find the official restaurant website using Google search."""
+        if not self.page:
+            logger.error("Page object not available for finding restaurant website.")
+            return None
+
+        query = f"{restaurant_name} {city_state if city_state else ''} official website"
+        search_url = f"https://www.google.com/search?q={query.replace(' ', '+')}"
+        logger.info(f"Searching for official website: {query}")
+
+        try:
+            await self.page.goto(search_url, wait_until='domcontentloaded', timeout=self.timeout)
+            await asyncio.sleep(random.uniform(2, 4)) # Allow search results to settle
+
+            # Try to find a link that looks like an official website
+            # This is a heuristic and might need refinement
+            # Common patterns: restaurant name in domain, no platform domains (yelp, tripadvisor etc.)
+
+            # More specific selectors for Google search results
+            # Google often uses <h3> tags for titles and <a> tags within them
+            possible_links = await self.page.query_selector_all('div.g a') # div.g is a common container for results
+
+            for link_element in possible_links:
+                href = await link_element.get_attribute('href')
+                if not href:
+                    continue
+
+                # Basic filtering for valid, non-Google related URLs
+                if not href.startswith('http') or "google.com" in href or "google.co" in href:
+                    continue
+
+                # Domain analysis (simplified)
+                parsed_url = urlparse(href)
+                domain = parsed_url.netloc.lower()
+
+                # Filter out common platform domains
+                platform_domains = [
+                    'yelp.com', 'tripadvisor.com', 'facebook.com', 'instagram.com',
+                    'doordash.com', 'grubhub.com', 'ubereats.com', 'opentable.com',
+                    'allmenus.com', 'menupages.com', 'thefork.com', 'zomato.com',
+                    'mapquest.com', 'yellowpages.com', 'foursquare.com'
+                ]
+                if any(platform in domain for platform in platform_domains):
+                    continue
+
+                # Check if restaurant name (or parts of it) is in the domain or path
+                # This is a simple check, can be improved with fuzzy matching
+                name_parts = [part.lower() for part in restaurant_name.split() if len(part) > 3]
+                if not name_parts: # Handle cases with very short restaurant names
+                    if restaurant_name.lower().replace(" ", "") in domain.replace("-","").replace(".",""):
+                        logger.info(f"Found potential official website: {href}")
+                        return href
+                elif any(part in domain for part in name_parts) or \
+                     any(part in parsed_url.path.lower() for part in name_parts):
+                    logger.info(f"Found potential official website: {href}")
+                    return href
+
+            logger.warning(f"Could not reliably identify an official website for {restaurant_name}")
+            return None
+
+        except Exception as e:
+            logger.error(f"Error during Google search for {restaurant_name}: {e}")
+            return None
     
     async def cleanup(self):
         """Clean up browser resources"""
@@ -499,16 +679,35 @@ if __name__ == "__main__":
         try:
             await scraper.setup_browser()
             
-            # Test with a sample URL
-            test_url = "https://www.yelp.com/biz/la-crepe-bistro-homer-glen"
-            result = await scraper.extract_menu_items(test_url)
+            # Test with a sample URL and restaurant name/location
+            test_url = "https://www.yelp.com/biz/la-crepe-bistro-homer-glen" # Primary URL (e.g., Yelp)
+            restaurant_name_for_search = "La Crepe Bistro"
+            city_state_for_search = "Homer Glen IL"
+
+            # For a non-Yelp example that might benefit from official site search:
+            # test_url = "https://www.yelp.com/biz/some-other-restaurant-chicago" # Made up, assume this page has minimal info
+            # restaurant_name_for_search = "Some Other Restaurant"
+            # city_state_for_search = "Chicago IL"
+
+
+            print(f"Testing with URL: {test_url}")
+            print(f"Restaurant Name for official site search: {restaurant_name_for_search}, Location: {city_state_for_search}")
+
+            result = await scraper.extract_menu_items(
+                test_url,
+                restaurant_name=restaurant_name_for_search,
+                city_state=city_state_for_search
+            )
             
             print(f"\n🎯 PRODUCTION SCRAPER TEST RESULTS:")
+            print(f"Final Scraped URL: {result['url']} (Source: {result['scraped_source']})")
             print(f"Success: {result['success']}")
             print(f"Items extracted: {result['total_items']}")
             print(f"Processing time: {result['processing_time']}s")
             print(f"Extraction method: {result['extraction_method']}")
             print(f"Price coverage: {result['price_coverage']}%")
+            if result.get('error'):
+                print(f"Error: {result['error']}")
             
             if result['items']:
                 print(f"\n📋 Sample items:")
