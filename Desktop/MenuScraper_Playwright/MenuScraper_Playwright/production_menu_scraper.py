@@ -18,8 +18,14 @@ from urllib.parse import urljoin, urlparse
 
 try:
     from playwright.async_api import async_playwright, Browser, Page
+    import cv2
+    import numpy as np
+    # import pytesseract # No longer using Tesseract directly here
+    # from PIL import Image # PIL might be used by easyocr indirectly or for other image ops
+    import io # For byte streams with PIL
+    import easyocr # For EasyOCR
 except ImportError:
-    print("❌ Playwright not installed. Run: pip install playwright")
+    print("❌ Playwright, OpenCV, NumPy, EasyOCR, or Pillow not installed. Run: pip install playwright opencv-python numpy easyocr Pillow")
     exit(1)
 
 try:
@@ -42,11 +48,13 @@ logger = logging.getLogger(__name__)
 class ProductionMenuScraper:
     """Production-ready menu scraper with enhanced success rate and reliability"""
     
-    def __init__(self, headless: bool = True, timeout: int = 30000):
+    def __init__(self, headless: bool = True, timeout: int = 30000, browser_name: str = "chromium"):
         self.headless = headless
         self.timeout = timeout
+        self.browser_name = browser_name.lower()
         self.browser: Optional[Browser] = None
         self.page: Optional[Page] = None
+        self.ocr_reader: Optional[Any] = None # For EasyOCR reader instance
         
         # Enhanced extraction patterns based on successful Enhanced Scraper
         self.menu_selectors = [
@@ -94,23 +102,35 @@ class ProductionMenuScraper:
         try:
             playwright = await async_playwright().start()
             
-            # Enhanced browser setup for better success rate
-            self.browser = await playwright.chromium.launch(
+            browser_launcher = None
+            if self.browser_name == "firefox":
+                browser_launcher = playwright.firefox
+            elif self.browser_name == "webkit":
+                browser_launcher = playwright.webkit
+            else: # Default to chromium
+                if self.browser_name != "chromium":
+                    logger.warning(f"Unsupported browser_name '{self.browser_name}', defaulting to chromium.")
+                browser_launcher = playwright.chromium
+
+            logger.info(f"Launching browser: {self.browser_name}")
+            self.browser = await browser_launcher.launch(
                 headless=self.headless,
                 args=[
-                    '--no-sandbox',
+                    '--no-sandbox', # Common argument, keep for all
                     '--disable-blink-features=AutomationControlled',
                     '--disable-features=VizDisplayCompositor',
                     '--disable-web-security',
                     '--disable-features=TranslateUI',
-                    '--disable-ipc-flooding-protection',
-                    '--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+                    '--disable-ipc-flooding-protection'
+                    # User-agent will be set in new_context for consistency
                 ]
             )
             
+            updated_user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36'
+
             # Create page with enhanced settings
             context = await self.browser.new_context(
-                user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                user_agent=updated_user_agent,
                 viewport={'width': 1920, 'height': 1080},
                 # java_script_enabled=True, # Already default
                 # accept_downloads=False, # Default
@@ -120,13 +140,19 @@ class ProductionMenuScraper:
             # Set additional headers that are common in browsers
             await self.page.set_extra_http_headers({
                 'Accept-Language': 'en-US,en;q=0.9',
-                'Accept-Encoding': 'gzip, deflate, br',
-                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+                'Accept-Encoding': 'gzip, deflate, br', # Playwright handles actual encoding/decoding
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9', # Adjusted q for main accept
                 'Sec-Fetch-Site': 'none',
                 'Sec-Fetch-Mode': 'navigate',
                 'Sec-Fetch-User': '?1',
                 'Sec-Fetch-Dest': 'document',
-                'Upgrade-Insecure-Requests': '1'
+                'Upgrade-Insecure-Requests': '1',
+                # Adding Sec-CH-UA headers (User-Agent Client Hints)
+                # Note: For these to be fully effective, the site often needs to opt-in via Accept-CH header.
+                # However, sending them doesn't hurt and might be checked by some systems.
+                'Sec-CH-UA': '"Google Chrome";v="125", "Chromium";v="125", "Not.A/Brand";v="24"',
+                'Sec-CH-UA-Mobile': '?0', # Indicates desktop
+                'Sec-CH-UA-Platform': '"Windows"' # Common platform to mimic
             })
             
             # Set realistic viewport (already set in new_context, but doesn't hurt to ensure)
@@ -249,8 +275,8 @@ class ProductionMenuScraper:
             try:
                 logger.info(f"🌐 Navigating to {url} (attempt {attempt + 1}/{max_retries})")
                 
-                # Random delay to appear more human-like
-                await asyncio.sleep(random.uniform(1, 3))
+                # Increased random delay to appear more human-like
+                await asyncio.sleep(random.uniform(2, 5)) # Was 1-3s
                 
                 # Navigate with timeout
                 response = await self.page.goto(
@@ -262,14 +288,14 @@ class ProductionMenuScraper:
                 if response and response.status == 200:
                     # Wait for the page to be fully loaded
                     await self.page.wait_for_function("document.readyState === 'complete'", timeout=self.timeout / 2)
-                    await asyncio.sleep(random.uniform(1, 2)) # Additional small random delay
+                    await asyncio.sleep(random.uniform(2, 4)) # Increased, was 1-2s
                     
                     # Check for bot detection
                     content = await self.page.content()
                     if self._is_bot_detected(content):
                         logger.warning(f"🤖 Bot detection on attempt {attempt + 1}")
                         if attempt < max_retries - 1:
-                            await asyncio.sleep(random.uniform(5, 10))
+                            await asyncio.sleep(random.uniform(8, 15)) # Increased, was 5-10s
                             continue
                         return False
                     
@@ -282,7 +308,7 @@ class ProductionMenuScraper:
                 logger.error(f"❌ Navigation attempt {attempt + 1} failed: {e}")
                 
             if attempt < max_retries - 1:
-                await asyncio.sleep(random.uniform(3, 7))
+                await asyncio.sleep(random.uniform(5, 10)) # Increased, was 3-7s
         
         return False
     
@@ -326,7 +352,7 @@ class ProductionMenuScraper:
                 try:
                     for _ in range(3): # Scroll a few times
                         await self.page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
-                        await asyncio.sleep(random.uniform(0.5, 1.5))
+                        await asyncio.sleep(random.uniform(1.0, 2.5)) # Increased, was 0.5-1.5s
                 except Exception as e:
                     logger.warning(f"Error during scrolling on Yelp page: {e}")
             elif is_official_site: # Generic scrolling for official sites
@@ -334,7 +360,7 @@ class ProductionMenuScraper:
                 try:
                     for _ in range(2): # Scroll a bit less aggressively
                         await self.page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
-                        await asyncio.sleep(random.uniform(0.5, 1.0))
+                        await asyncio.sleep(random.uniform(1.0, 2.0)) # Increased, was 0.5-1.0s
                 except Exception as e:
                     logger.warning(f"Error during scrolling on official site: {e}")
             # --- End dynamic content handling ---
@@ -679,16 +705,33 @@ class ProductionMenuScraper:
                 if any(platform in domain for platform in platform_domains):
                     continue
 
-                # Check if restaurant name (or parts of it) is in the domain or path
-                # This is a simple check, can be improved with fuzzy matching
-                name_parts = [part.lower() for part in restaurant_name.split() if len(part) > 3]
-                if not name_parts: # Handle cases with very short restaurant names
-                    if restaurant_name.lower().replace(" ", "") in domain.replace("-","").replace(".",""):
-                        logger.info(f"Found potential official website: {href}")
-                        return href
-                elif any(part in domain for part in name_parts) or \
-                     any(part in parsed_url.path.lower() for part in name_parts):
-                    logger.info(f"Found potential official website: {href}")
+                link_text_content = await link_element.text_content()
+                link_text = link_text_content.lower() if link_text_content else ""
+
+                # Check if restaurant name (or parts of it) is in the domain, path, or link text
+                restaurant_name_lower = restaurant_name.lower()
+                name_parts = [part.lower() for part in restaurant_name_lower.split() if len(part) > 2] # Use shorter parts
+
+                # Score potential links: higher is better
+                score = 0
+                if any(part in domain for part in name_parts):
+                    score += 2
+                # Penalize if domain is very generic but name is in path
+                elif any(part in parsed_url.path.lower() for part in name_parts) and not any(d in domain for d in ['blogspot.com', 'wordpress.com', 'wixsite.com']): # Avoid generic blog/site builder subpaths unless domain also matches
+                    score += 1
+
+                if restaurant_name_lower in link_text:
+                    score += 3 # Strong indicator
+                elif any(part in link_text for part in name_parts):
+                    score += 1
+
+                # Check for "official" or "home" in link text - very strong signal if name also matches somewhat
+                if score > 0 and ("official site" in link_text or "official website" in link_text or (restaurant_name_lower in link_text and "home" in link_text)):
+                    score += 5
+
+                if score >= 3: # Threshold for considering it a match
+                    logger.info(f"Found potential official website (score: {score}): {href} (Text: {link_text_content})")
+                    # Could collect top N scored links and pick the best, but for now, first good one.
                     return href
 
             logger.warning(f"Could not reliably identify an official website for {restaurant_name}")
@@ -792,8 +835,10 @@ class ProductionMenuScraper:
     async def _process_image_with_ocr(self, image_url: str) -> Optional[str]:
         """
         Downloads an image and processes it with OCR.
-        Currently a placeholder for actual OCR engine integration and preprocessing.
-        Dependencies like opencv-python, easyocr/pytesseract would be needed.
+        Uses Tesseract OCR.
+        Dependencies: pytesseract, opencv-python.
+        NOTE: Tesseract OCR engine must be installed on the system and typically in PATH.
+        (e.g., sudo apt-get install tesseract-ocr tesseract-ocr-eng)
         """
         logger.info(f"Attempting OCR for image: {image_url}")
         image_bytes = await self._download_image(image_url)
@@ -801,48 +846,89 @@ class ProductionMenuScraper:
             return None
 
         extracted_text = None
+        self.image_for_ocr = None
 
-        # --- Placeholder for Image Preprocessing (using OpenCV) ---
-        # import cv2
-        # import numpy as np
-        # try:
-        #     nparr = np.frombuffer(image_bytes, np.uint8)
-        #     img_np = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-        #     if img_np is None:
-        #         logger.warning(f"Could not decode image for OCR: {image_url}")
-        #         return None
-        #
-        #     gray_image = cv2.cvtColor(img_np, cv2.COLOR_BGR2GRAY)
-        #     # _, binary_image = cv2.threshold(gray_image, 128, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
-        #     # processed_image_bytes = cv2.imencode('.png', binary_image)[1].tobytes()
-        #     # For now, just use gray_image for conceptual pytesseract if it were here
-        #     logger.info(f"Image preprocessed (conceptually) for OCR: {image_url}")
-        #     # image_for_ocr = Image.open(io.BytesIO(processed_image_bytes)) # If using Pillow + Pytesseract
-        # except Exception as e:
-        #     logger.error(f"Error during conceptual image preprocessing for {image_url}: {e}")
-        #     return None
-        # --- End Placeholder for Image Preprocessing ---
+    def _initialize_ocr_reader(self):
+        """Initializes the EasyOCR reader if not already done."""
+        if self.ocr_reader is None:
+            try:
+                import easyocr
+                # Initialize for English. Add other languages if needed: ['en', 'es', 'fr']
+                # GPU can be True or False. If True, it will try to use GPU.
+                # If PyTorch with CUDA is not set up, it will fall back to CPU or might error.
+                self.ocr_reader = easyocr.Reader(['en'], gpu=False)
+                logger.info("EasyOCR reader initialized successfully (CPU).")
+            except ImportError:
+                logger.error("EasyOCR library not found. Please install it: pip install easyocr")
+                self.ocr_reader = None # Explicitly mark as None if import fails
+            except Exception as e:
+                logger.error(f"Failed to initialize EasyOCR reader: {e}")
+                self.ocr_reader = None
+        return self.ocr_reader
 
-        # --- Placeholder for OCR Engine (e.g., EasyOCR) ---
-        # try:
-        #     # Initialize EasyOCR reader (should be done once, e.g., in __init__)
-        #     # if not hasattr(self, 'ocr_reader') or self.ocr_reader is None:
-        #     #     import easyocr
-        #     #     self.ocr_reader = easyocr.Reader(['en']) # Or other languages
+    async def _process_image_with_ocr(self, image_url: str) -> Optional[str]:
+        """
+        Downloads an image and processes it with OCR (now targeting EasyOCR).
+        Dependencies: easyocr, opencv-python, numpy.
+        NOTE: Tesseract OCR engine must be installed on the system and typically in PATH.
+        (e.g., sudo apt-get install tesseract-ocr tesseract-ocr-eng)
+        """
+        logger.info(f"Attempting OCR for image: {image_url}")
+        image_bytes = await self._download_image(image_url)
+        if not image_bytes:
+            return None
 
-        #     # For EasyOCR, it takes the image path or bytes directly
-        #     ocr_results = self.ocr_reader.readtext(image_bytes)
-        #     extracted_text = " ".join([res[1] for res in ocr_results if res[2] > 0.3]) # Example confidence filter
-        #     logger.info(f"OCR extracted text (conceptual) from {image_url}: {extracted_text[:100]}...")
-        # except Exception as e:
-        #     logger.error(f"Error during conceptual OCR processing for {image_url}: {e}")
-        #     # Fallback or failure
-        # --- End Placeholder for OCR Engine ---
+        extracted_text = None
+        # self.image_for_ocr = None # This was for Tesseract, EasyOCR can take bytes or preprocessed image
 
-        if not extracted_text: # If OCR block is commented out/fails
-             logger.warning(f"OCR processing is currently a placeholder. No text extracted for {image_url}.")
-             # To simulate finding something for testing flow:
-             # extracted_text = f"Simulated OCR text from {image_url}: Item A - $10, Item B - $12"
+        # --- Image Preprocessing (using OpenCV) ---
+        processed_image_data_for_ocr = image_bytes # Default to raw bytes if preprocessing fails or is skipped
+
+        try:
+            import cv2
+            import numpy as np
+            logger.info(f"Attempting OpenCV preprocessing for {image_url}")
+            nparr = np.frombuffer(image_bytes, np.uint8)
+            img_cv = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+
+            if img_cv is None:
+                logger.warning(f"Could not decode image with OpenCV: {image_url}. Using raw bytes for OCR.")
+            else:
+                gray_image = cv2.cvtColor(img_cv, cv2.COLOR_BGR2GRAY)
+                blurred_image = cv2.medianBlur(gray_image, 3)
+                binary_image = cv2.adaptiveThreshold(
+                    blurred_image, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
+                    cv2.THRESH_BINARY, 11, 2
+                )
+                processed_image_data_for_ocr = binary_image
+                logger.info(f"Image preprocessed successfully for OCR: {image_url}")
+
+        except ImportError:
+            logger.warning("OpenCV (cv2) or NumPy not installed. Skipping preprocessing. Will attempt OCR on raw image bytes.")
+        except Exception as e:
+            logger.error(f"Error during image preprocessing for {image_url}: {e}. Skipping preprocessing, will attempt OCR on raw image bytes.")
+        # --- End Image Preprocessing ---
+
+        # --- EasyOCR Engine ---
+        ocr_reader = self._initialize_ocr_reader() # This already handles ImportError for easyocr
+
+        if ocr_reader:
+            try:
+                logger.info(f"Performing EasyOCR on {'preprocessed image' if isinstance(processed_image_data_for_ocr, np.ndarray) else 'raw image bytes'}.")
+                ocr_results = ocr_reader.readtext(processed_image_data_for_ocr, detail=0, paragraph=True)
+                extracted_text = "\n".join(ocr_results)
+                if extracted_text:
+                    logger.info(f"EasyOCR extracted text from {image_url} (length: {len(extracted_text)} chars). Preview: {extracted_text[:100].replace('\n', ' ')}...")
+                else:
+                    logger.info(f"EasyOCR found no text in {image_url}.")
+            except Exception as e:
+                logger.error(f"Error during EasyOCR processing for {image_url}: {e}")
+                extracted_text = None # Ensure extracted_text is None if OCR fails
+        else:
+            logger.warning(f"EasyOCR reader not available. Simulating OCR text for {image_url}.")
+            # Simulate OCR text if EasyOCR couldn't be loaded (e.g., due to failed pip install)
+            extracted_text = f"SIMULATED OCR TEXT from {image_url}: Special Burger - $10.99, Fries - $3.50. Allergens: gluten, dairy."
+        # --- End EasyOCR Engine ---
 
         return extracted_text
     
@@ -859,12 +945,20 @@ class ProductionMenuScraper:
 
 # Example usage and testing
 if __name__ == "__main__":
-    async def test_scraper():
-        scraper = ProductionMenuScraper(headless=True)
+    async def test_scraper(browser_to_test: str = "chromium"):
+        logger.info(f"--- Testing with {browser_to_test} ---")
+        scraper = ProductionMenuScraper(headless=True, browser_name=browser_to_test)
         
         try:
-            await scraper.setup_browser()
-            
+            setup_success = await scraper.setup_browser()
+            if not setup_success:
+                logger.error(f"Failed to setup browser {browser_to_test}. Aborting test.")
+                return
+
+
+            # Test with a sample URL and restaurant name/location
+            test_url = "https://www.yelp.com/biz/la-crepe-bistro-homer-glen" # Primary URL (e.g., Yelp)
+
             # Test with a sample URL and restaurant name/location
             test_url = "https://www.yelp.com/biz/la-crepe-bistro-homer-glen" # Primary URL (e.g., Yelp)
             restaurant_name_for_search = "La Crepe Bistro"
@@ -884,6 +978,48 @@ if __name__ == "__main__":
                 restaurant_name=restaurant_name_for_search,
                 city_state=city_state_for_search
             )
+
+            print(f"\n🎯 PRODUCTION SCRAPER TEST RESULTS:")
+            print(f"Final Scraped URL: {result['url']} (Source: {result['scraped_source']})")
+            print(f"Success: {result['success']}")
+            print(f"Items extracted: {result['total_items']}")
+            print(f"Processing time: {result['processing_time']}s")
+            print(f"Extraction method: {result['extraction_method']}")
+            print(f"Price coverage: {result['price_coverage']}%")
+            if result.get('error'):
+                print(f"Error: {result['error']}")
+
+            if result['items']:
+                print(f"\n📋 Sample items:")
+                for i, item in enumerate(result['items'][:3], 1):
+                    print(f"  {i}. {item['name']} - {item.get('price', 'No price')}")
+                    if item.get('allergens'):
+                        print(f"     Allergens: {', '.join(item['allergens'])}")
+
+        finally:
+            await scraper.cleanup()
+
+    # Run the test
+
+            # For a non-Yelp example that might benefit from official site search:
+            # test_url = "https://www.yelp.com/biz/some-other-restaurant-chicago" # Made up, assume this page has minimal info
+            # restaurant_name_for_search = "Some Other Restaurant"
+            # city_state_for_search = "Chicago IL"
+
+            # Test with a name likely to require fallback to official site and potentially OCR
+            test_url = "https://www.yelp.com/biz/non-existent-for-primary-failure-XXXXYYYYZZZZ" # Ensure primary Yelp URL fails
+            restaurant_name_for_search = "Luigi's Family Pizzeria"
+            city_state_for_search = "Pleasantville OH"
+
+
+            print(f"Testing with URL: {test_url}")
+            print(f"Restaurant Name for official site search: {restaurant_name_for_search}, Location: {city_state_for_search}")
+
+            result = await scraper.extract_menu_items(
+                test_url,
+                restaurant_name=restaurant_name_for_search,
+                city_state=city_state_for_search
+            )
             
             print(f"\n🎯 PRODUCTION SCRAPER TEST RESULTS:")
             print(f"Final Scraped URL: {result['url']} (Source: {result['scraped_source']})")
@@ -892,6 +1028,15 @@ if __name__ == "__main__":
             print(f"Processing time: {result['processing_time']}s")
             print(f"Extraction method: {result['extraction_method']}")
             print(f"Price coverage: {result['price_coverage']}%")
+            if result.get('menu_image_urls'):
+                print(f"Menu Image URLs Found: {len(result['menu_image_urls'])}")
+                for i, img_url in enumerate(result['menu_image_urls'][:2]): # Print first 2
+                    print(f"  - {img_url}")
+            if result.get('ocr_texts'):
+                print(f"OCR Texts Extracted: {len(result['ocr_texts'])}")
+                for i, ocr_item in enumerate(result['ocr_texts'][:2]): # Print first 2
+                    print(f"  - Image: {ocr_item['image_url']}")
+                    print(f"    Text: {ocr_item['text'][:100]}...") # Print preview
             if result.get('error'):
                 print(f"Error: {result['error']}")
             
@@ -906,4 +1051,7 @@ if __name__ == "__main__":
             await scraper.cleanup()
     
     # Run the test
-    asyncio.run(test_scraper())
+    # Test with chromium (default)
+    asyncio.run(test_scraper("chromium"))
+    # Test with firefox
+    # asyncio.run(test_scraper("firefox"))

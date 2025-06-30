@@ -42,3 +42,19 @@
 2025-06-29 22:53:43,622 - INFO - Could not find a different official website for 'La Crepe Bistro'. Sticking with primary URL data.
 2025-06-29 22:53:43,622 - WARNING - Extraction failed for https://www.yelp.com/biz/la-crepe-bistro-homer-glen (primary_url). Error: Navigation failed
 2025-06-29 22:53:43,687 - INFO - 🧹 Browser cleanup completed
+2025-06-30 02:47:15,128 - INFO - ✅ Browser setup completed successfully
+2025-06-30 02:47:15,128 - INFO - Attempting to scrape primary URL: https://www.yelp.com/biz/la-crepe-bistro-homer-glen
+2025-06-30 02:47:15,128 - INFO - 🌐 Navigating to https://www.yelp.com/biz/la-crepe-bistro-homer-glen (attempt 1/3)
+2025-06-30 02:47:17,938 - WARNING - ⚠️ HTTP 403
+2025-06-30 02:47:26,322 - INFO - 🌐 Navigating to https://www.yelp.com/biz/la-crepe-bistro-homer-glen (attempt 2/3)
+2025-06-30 02:47:29,378 - WARNING - ⚠️ HTTP 403
+2025-06-30 02:47:36,826 - INFO - 🌐 Navigating to https://www.yelp.com/biz/la-crepe-bistro-homer-glen (attempt 3/3)
+2025-06-30 02:47:40,246 - WARNING - ⚠️ HTTP 403
+2025-06-30 02:47:40,247 - INFO - Primary URL scrape yielded 0 items. Attempting to find and scrape official website for 'La Crepe Bistro'.
+2025-06-30 02:47:40,247 - INFO - Searching for official website: La Crepe Bistro Homer Glen IL official website
+2025-06-30 02:47:43,082 - WARNING - Could not reliably identify an official website for La Crepe Bistro
+2025-06-30 02:47:43,082 - INFO - Could not find a different official website for 'La Crepe Bistro'. Sticking with primary URL data.
+2025-06-30 02:47:43,083 - WARNING - Extraction failed for https://www.yelp.com/biz/la-crepe-bistro-homer-glen (primary_url). Error: Navigation failed
+2025-06-30 02:47:43,169 - INFO - 🧹 Browser cleanup completed
+2025-06-30 02:48:51,112 - INFO - --- Testing with firefox ---
+2025-06-30 02:48:52,497 - INFO - Launching browser: firefox
