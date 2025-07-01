@@ -143,6 +143,95 @@ python test_phase2_scrapers.py
    # Edit .env file with your API keys and credentials
    ```
 
+## Database Integration
+
+### Supabase Setup
+This project integrates with Supabase for cloud database storage and API functionality.
+
+#### Database Schema
+1. Apply the database schema:
+   ```sql
+   -- Run the contents of database_schema.sql in your Supabase SQL editor
+   ```
+
+2. Configure environment variables:
+   ```bash
+   SUPABASE_URL=your_supabase_project_url
+   SUPABASE_KEY=your_supabase_anon_key
+   SUPABASE_SERVICE_KEY=your_supabase_service_role_key
+   ```
+
+#### Features
+- **Restaurant Management**: Store and query restaurant information
+- **Menu Item Storage**: Comprehensive menu data with categories
+- **Allergen Tracking**: Detailed allergen information and risk levels
+- **Dietary Tags**: Support for dietary preferences (vegan, gluten-free, etc.)
+- **Scraping Sessions**: Track scraping performance and metrics
+- **API Usage Logs**: Monitor API performance and usage patterns
+
+### API Server
+Start the FastAPI server for frontend integration:
+
+```bash
+python api_server.py
+```
+
+API Documentation: http://localhost:8000/docs
+
+#### Available Endpoints
+- `GET /api/restaurants` - List restaurants with filtering
+- `GET /api/restaurants/{id}/menu` - Get menu items for a restaurant
+- `POST /api/search/menu-items` - Search menu items with filters
+- `GET /api/analytics/cuisine-types` - Get cuisine type statistics
+- `GET /api/analytics/cities` - Get city-based restaurant data
+- `POST /api/scrape/restaurant` - Trigger new restaurant scraping
+
+### Quick Start with Integration
+
+1. **Install dependencies**:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+2. **Set up environment variables**:
+   ```bash
+   cp .env.example .env
+   # Edit .env with your Supabase credentials
+   ```
+
+3. **Apply database schema**:
+   - Copy contents of `database_schema.sql`
+   - Run in your Supabase SQL editor
+
+4. **Run integration demo**:
+   ```bash
+   python example_integration.py --demo
+   ```
+
+5. **Start API server**:
+   ```bash
+   python example_integration.py --start-api
+   ```
+
+6. **Test API endpoints**:
+   - Visit http://localhost:8000/docs for interactive API documentation
+   - Use the `/api/restaurants` endpoint to see stored data
+
+#### Example Integration Commands
+```bash
+# Run comprehensive demo
+python example_integration.py --demo
+
+# Scrape a specific restaurant
+python example_integration.py --scrape-url https://restaurant-website.com
+
+# Query restaurants by city
+python example_integration.py --query-restaurants --city Chicago
+
+# Start the API server
+python example_integration.py --start-api
+```
+
 ## 🔐 Security Configuration
 
 **IMPORTANT**: This project requires API keys for various services. Never commit sensitive credentials to version control.
@@ -163,6 +252,11 @@ FOURSQUARE_CLIENT_SECRET=your_foursquare_client_secret_here
 # OpenStreetMap OAuth Configuration
 OSM_CLIENT_ID=your_osm_client_id_here
 OSM_CLIENT_SECRET=your_osm_client_secret_here
+
+# Supabase Configuration
+SUPABASE_URL=your_supabase_project_url
+SUPABASE_KEY=your_supabase_anon_key
+SUPABASE_SERVICE_KEY=your_supabase_service_role_key
 ```
 
 ### Security Best Practices
@@ -172,6 +266,7 @@ OSM_CLIENT_SECRET=your_osm_client_secret_here
 - ✅ Regularly rotate API keys and credentials
 - ✅ Use least-privilege access for API keys
 - ✅ Monitor API usage for unusual activity
+- ✅ Use Supabase Row Level Security (RLS) for data protection
 
 **📋 Security Incident Response**: If you suspect a security breach or exposed credentials, refer to <mcfile name="SECURITY_INCIDENT_RESPONSE.md" path="C:\Users\cliff\Desktop\MenuScraper_Playwright\MenuScraper_Playwright\SECURITY_INCIDENT_RESPONSE.md"></mcfile> for immediate response procedures.
 

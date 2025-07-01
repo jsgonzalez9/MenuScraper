@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MenuScraper API Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+            padding: 25px;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            background: #f9f9f9;
+        }
+        
+        .section h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .control-group label {
+            font-weight: 600;
+            color: #555;
+        }
+        
+        input, select, button {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+        
+        button {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        }
+        
+        button:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .results {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .restaurant-card, .menu-item-card {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .restaurant-card:hover, .menu-item-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .restaurant-name {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+        
+        .restaurant-info {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+        
+        .menu-item-name {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        
+        .menu-item-description {
+            color: #666;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+        }
+        
+        .menu-item-price {
+            font-weight: 600;
+            color: #27ae60;
+            font-size: 1.1em;
+        }
+        
+        .tags {
+            display: flex;
+            gap: 5px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .tag {
+            background: #3498db;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: 500;
+        }
+        
+        .tag.allergen {
+            background: #e74c3c;
+        }
+        
+        .tag.dietary {
+            background: #27ae60;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+        
+        .error {
+            background: #fee;
+            border: 1px solid #fcc;
+            color: #c33;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+        
+        .status {
+            background: #e8f5e8;
+            border: 1px solid #c3e6c3;
+            color: #2d5a2d;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 0.9em;
+        }
+        
+        @media (max-width: 768px) {
+            .controls {
+                flex-direction: column;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🍽️ MenuScraper API Demo</h1>
+            <p>Interactive demonstration of the MenuScraper API with Supabase integration</p>
+        </div>
+        
+        <div class="content">
+            <div id="status" class="status">
+                API Base URL: <strong>http://localhost:8000</strong> | 
+                Status: <span id="api-status">Checking...</span>
+            </div>
+            
+            <!-- Restaurants Section -->
+            <div class="section">
+                <h2>🏪 Restaurants</h2>
+                <div class="controls">
+                    <div class="control-group">
+                        <label for="city-filter">City:</label>
+                        <input type="text" id="city-filter" placeholder="e.g., Chicago">
+                    </div>
+                    <div class="control-group">
+                        <label for="cuisine-filter">Cuisine:</label>
+                        <input type="text" id="cuisine-filter" placeholder="e.g., Italian">
+                    </div>
+                    <div class="control-group">
+                        <label>&nbsp;</label>
+                        <button onclick="loadRestaurants()">Load Restaurants</button>
+                    </div>
+                </div>
+                <div id="restaurants-results" class="results">
+                    <div class="loading">Click "Load Restaurants" to fetch data</div>
+                </div>
+            </div>
+            
+            <!-- Menu Search Section -->
+            <div class="section">
+                <h2>🔍 Menu Item Search</h2>
+                <div class="controls">
+                    <div class="control-group">
+                        <label for="search-term">Search Term:</label>
+                        <input type="text" id="search-term" placeholder="e.g., burger, salad, pizza">
+                    </div>
+                    <div class="control-group">
+                        <label for="exclude-allergens">Exclude Allergens:</label>
+                        <input type="text" id="exclude-allergens" placeholder="e.g., dairy, gluten (comma-separated)">
+                    </div>
+                    <div class="control-group">
+                        <label>&nbsp;</label>
+                        <button onclick="searchMenuItems()">Search Menu Items</button>
+                    </div>
+                </div>
+                <div id="search-results" class="results">
+                    <div class="loading">Enter a search term and click "Search Menu Items"</div>
+                </div>
+            </div>
+            
+            <!-- Analytics Section -->
+            <div class="section">
+                <h2>📊 Analytics</h2>
+                <div class="controls">
+                    <button onclick="loadCuisineTypes()">Load Cuisine Types</button>
+                    <button onclick="loadCities()">Load Cities</button>
+                    <button onclick="loadAllergenStats()">Load Allergen Stats</button>
+                </div>
+                <div id="analytics-results" class="results">
+                    <div class="loading">Click any analytics button to load data</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const API_BASE = 'http://localhost:8000';
+        
+        // Check API status on load
+        async function checkApiStatus() {
+            try {
+                const response = await fetch(`${API_BASE}/health`);
+                const data = await response.json();
+                document.getElementById('api-status').textContent = data.status === 'healthy' ? '✅ Online' : '❌ Offline';
+                document.getElementById('api-status').style.color = data.status === 'healthy' ? '#27ae60' : '#e74c3c';
+            } catch (error) {
+                document.getElementById('api-status').textContent = '❌ Offline';
+                document.getElementById('api-status').style.color = '#e74c3c';
+                console.error('API health check failed:', error);
+            }
+        }
+        
+        // Load restaurants
+        async function loadRestaurants() {
+            const resultsDiv = document.getElementById('restaurants-results');
+            resultsDiv.innerHTML = '<div class="loading">Loading restaurants...</div>';
+            
+            try {
+                const city = document.getElementById('city-filter').value;
+                const cuisine = document.getElementById('cuisine-filter').value;
+                
+                let url = `${API_BASE}/api/restaurants?limit=20`;
+                if (city) url += `&city=${encodeURIComponent(city)}`;
+                if (cuisine) url += `&cuisine_type=${encodeURIComponent(cuisine)}`;
+                
+                const response = await fetch(url);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const restaurants = await response.json();
+                
+                if (restaurants.length === 0) {
+                    resultsDiv.innerHTML = '<div class="loading">No restaurants found. Try running the demo first: <code>python example_integration.py --demo</code></div>';
+                    return;
+                }
+                
+                resultsDiv.innerHTML = restaurants.map(restaurant => `
+                    <div class="restaurant-card">
+                        <div class="restaurant-name">${restaurant.name}</div>
+                        <div class="restaurant-info">📍 ${restaurant.city || 'Unknown'}, ${restaurant.state || 'Unknown'}</div>
+                        <div class="restaurant-info">🍽️ ${restaurant.cuisine_type || 'Unknown cuisine'}</div>
+                        <div class="restaurant-info">📊 ${restaurant.total_menu_items || 0} menu items</div>
+                        ${restaurant.rating ? `<div class="restaurant-info">⭐ ${restaurant.rating}/5 (${restaurant.review_count || 0} reviews)</div>` : ''}
+                        <button onclick="loadMenuItems('${restaurant.id}', '${restaurant.name}')" style="margin-top: 10px; padding: 8px 15px; font-size: 0.9em;">View Menu</button>
+                    </div>
+                `).join('');
+                
+            } catch (error) {
+                resultsDiv.innerHTML = `<div class="error">Error loading restaurants: ${error.message}</div>`;
+                console.error('Error loading restaurants:', error);
+            }
+        }
+        
+        // Load menu items for a restaurant
+        async function loadMenuItems(restaurantId, restaurantName) {
+            const resultsDiv = document.getElementById('restaurants-results');
+            resultsDiv.innerHTML = `<div class="loading">Loading menu for ${restaurantName}...</div>`;
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/restaurants/${restaurantId}/menu`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const menuItems = await response.json();
+                
+                if (menuItems.length === 0) {
+                    resultsDiv.innerHTML = `<div class="loading">No menu items found for ${restaurantName}</div>`;
+                    return;
+                }
+                
+                resultsDiv.innerHTML = `
+                    <div style="margin-bottom: 20px;">
+                        <button onclick="loadRestaurants()" style="padding: 8px 15px; font-size: 0.9em;">← Back to Restaurants</button>
+                        <h3 style="margin: 10px 0; color: #2c3e50;">Menu for ${restaurantName}</h3>
+                    </div>
+                    ${menuItems.map(item => `
+                        <div class="menu-item-card">
+                            <div class="menu-item-name">${item.name}</div>
+                            ${item.description ? `<div class="menu-item-description">${item.description}</div>` : ''}
+                            ${item.price ? `<div class="menu-item-price">$${item.price}</div>` : ''}
+                            ${item.category_name ? `<div class="restaurant-info">📂 ${item.category_name}</div>` : ''}
+                            <div class="tags">
+                                ${(item.allergens || []).map(allergen => `<span class="tag allergen">⚠️ ${allergen}</span>`).join('')}
+                                ${(item.dietary_tags || []).map(tag => `<span class="tag dietary">✅ ${tag}</span>`).join('')}
+                            </div>
+                        </div>
+                    `).join('')}
+                `;
+                
+            } catch (error) {
+                resultsDiv.innerHTML = `<div class="error">Error loading menu items: ${error.message}</div>`;
+                console.error('Error loading menu items:', error);
+            }
+        }
+        
+        // Search menu items
+        async function searchMenuItems() {
+            const resultsDiv = document.getElementById('search-results');
+            const searchTerm = document.getElementById('search-term').value;
+            
+            if (!searchTerm.trim()) {
+                resultsDiv.innerHTML = '<div class="error">Please enter a search term</div>';
+                return;
+            }
+            
+            resultsDiv.innerHTML = '<div class="loading">Searching menu items...</div>';
+            
+            try {
+                const excludeAllergens = document.getElementById('exclude-allergens').value
+                    .split(',')
+                    .map(s => s.trim())
+                    .filter(s => s.length > 0);
+                
+                const searchRequest = {
+                    query: searchTerm,
+                    exclude_allergens: excludeAllergens,
+                    limit: 20
+                };
+                
+                const response = await fetch(`${API_BASE}/api/search/menu-items`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(searchRequest)
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const menuItems = await response.json();
+                
+                if (menuItems.length === 0) {
+                    resultsDiv.innerHTML = '<div class="loading">No menu items found matching your search criteria</div>';
+                    return;
+                }
+                
+                resultsDiv.innerHTML = menuItems.map(item => `
+                    <div class="menu-item-card">
+                        <div class="menu-item-name">${item.name}</div>
+                        ${item.description ? `<div class="menu-item-description">${item.description}</div>` : ''}
+                        ${item.price ? `<div class="menu-item-price">$${item.price}</div>` : ''}
+                        <div class="restaurant-info">🏪 ${item.restaurant_name || 'Unknown Restaurant'}</div>
+                        ${item.category_name ? `<div class="restaurant-info">📂 ${item.category_name}</div>` : ''}
+                        <div class="tags">
+                            ${(item.allergens || []).map(allergen => `<span class="tag allergen">⚠️ ${allergen}</span>`).join('')}
+                            ${(item.dietary_tags || []).map(tag => `<span class="tag dietary">✅ ${tag}</span>`).join('')}
+                        </div>
+                    </div>
+                `).join('');
+                
+            } catch (error) {
+                resultsDiv.innerHTML = `<div class="error">Error searching menu items: ${error.message}</div>`;
+                console.error('Error searching menu items:', error);
+            }
+        }
+        
+        // Load cuisine types
+        async function loadCuisineTypes() {
+            const resultsDiv = document.getElementById('analytics-results');
+            resultsDiv.innerHTML = '<div class="loading">Loading cuisine types...</div>';
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/analytics/cuisine-types`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                
+                resultsDiv.innerHTML = `
+                    <h3 style="margin-bottom: 15px; color: #2c3e50;">Cuisine Types</h3>
+                    ${data.cuisine_types.map(cuisine => `
+                        <div class="restaurant-card">
+                            <div class="restaurant-name">${cuisine.name}</div>
+                            <div class="restaurant-info">🏪 ${cuisine.restaurant_count} restaurants</div>
+                        </div>
+                    `).join('')}
+                `;
+                
+            } catch (error) {
+                resultsDiv.innerHTML = `<div class="error">Error loading cuisine types: ${error.message}</div>`;
+                console.error('Error loading cuisine types:', error);
+            }
+        }
+        
+        // Load cities
+        async function loadCities() {
+            const resultsDiv = document.getElementById('analytics-results');
+            resultsDiv.innerHTML = '<div class="loading">Loading cities...</div>';
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/analytics/cities`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                
+                resultsDiv.innerHTML = `
+                    <h3 style="margin-bottom: 15px; color: #2c3e50;">Cities</h3>
+                    ${data.cities.map(city => `
+                        <div class="restaurant-card">
+                            <div class="restaurant-name">${city.name}</div>
+                            <div class="restaurant-info">🏪 ${city.restaurant_count} restaurants</div>
+                        </div>
+                    `).join('')}
+                `;
+                
+            } catch (error) {
+                resultsDiv.innerHTML = `<div class="error">Error loading cities: ${error.message}</div>`;
+                console.error('Error loading cities:', error);
+            }
+        }
+        
+        // Load allergen stats
+        async function loadAllergenStats() {
+            const resultsDiv = document.getElementById('analytics-results');
+            resultsDiv.innerHTML = '<div class="loading">Loading allergen statistics...</div>';
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/analytics/allergens`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                
+                resultsDiv.innerHTML = `
+                    <h3 style="margin-bottom: 15px; color: #2c3e50;">Allergen Statistics</h3>
+                    ${data.allergens.map(allergen => `
+                        <div class="restaurant-card">
+                            <div class="restaurant-name">⚠️ ${allergen.name}</div>
+                            <div class="restaurant-info">🍽️ ${allergen.item_count} menu items</div>
+                            <div class="restaurant-info">🏪 ${allergen.restaurant_count} restaurants</div>
+                        </div>
+                    `).join('')}
+                `;
+                
+            } catch (error) {
+                resultsDiv.innerHTML = `<div class="error">Error loading allergen stats: ${error.message}</div>`;
+                console.error('Error loading allergen stats:', error);
+            }
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            checkApiStatus();
+            
+            // Add enter key support for search
+            document.getElementById('search-term').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchMenuItems();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
