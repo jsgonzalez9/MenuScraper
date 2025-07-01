@@ -6,6 +6,7 @@ Collects restaurant data from OpenStreetMap using Overpass API
 
 import requests
 import json
+import os
 import time
 from typing import Dict, List, Any, Optional
 from datetime import datetime
@@ -26,8 +27,9 @@ class OpenStreetMapChicagoScraper:
     
     def __init__(self):
         # OpenStreetMap OAuth credentials
-        self.client_id = "LV8BGvPA-2iXdzYRdgD8XCJDxpry639ty7k3VjHbjr4"
-        self.client_secret = "1ShYNj0Jr7PXgXBIL-x-TzunV8fT7b3Rwz-9v0k-oqk"
+        # SECURITY: OAuth credentials moved to environment variables
+        self.client_id = os.getenv('OSM_CLIENT_ID', '')
+        self.client_secret = os.getenv('OSM_CLIENT_SECRET', '')
         
         # Overpass API endpoint (no authentication required for basic queries)
         self.overpass_url = "https://overpass-api.de/api/interpreter"

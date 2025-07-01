@@ -7,8 +7,9 @@ from datetime import datetime
 os.makedirs("output", exist_ok=True)
 
 # Yelp API Configuration
-YELP_API_KEY = "zU4pq53bDewtRNwTweR_mJ2iJDjdsIJ-_iFXYfdE03-VwhJOka86zLJJMHzuKsPWpLl6QTsa2a9U6k0MuHtOoTHO796Hlw8uKIYLuRLsgw5huQAer6_1rGfcLcteaHYx"
-YELP_CLIENT_ID = "sp7S-eWCMScZAacAvwz4kA"
+# SECURITY: API keys moved to environment variables
+YELP_API_KEY = os.getenv('YELP_API_KEY', '')
+YELP_CLIENT_ID = os.getenv('YELP_CLIENT_ID', '')
 
 # API Endpoints
 YELP_SEARCH_URL = "https://api.yelp.com/v3/businesses/search"

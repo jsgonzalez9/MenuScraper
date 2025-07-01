@@ -6,8 +6,9 @@ import os
 from typing import Dict, List, Any, Optional
 
 # Foursquare API Configuration
-FOURSQUARE_CLIENT_ID = "LIS3WLAIIZ4FWXQG3JYOCM1LQDVB0JTGNGEGO1LXV2J3TMWZ"
-FOURSQUARE_CLIENT_SECRET = "U0WHX3KTI442OEGLSETUILR4JKD4ADIKEN2KZQZEHULBVVT5"
+# SECURITY: API keys moved to environment variables
+FOURSQUARE_CLIENT_ID = os.getenv('FOURSQUARE_CLIENT_ID', '')
+FOURSQUARE_CLIENT_SECRET = os.getenv('FOURSQUARE_CLIENT_SECRET', '')
 FOURSQUARE_API_VERSION = "20231010"  # Use a recent version date
 
 def extract_allergen_info(text: str) -> Dict[str, Any]:

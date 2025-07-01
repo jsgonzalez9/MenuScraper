@@ -137,6 +137,44 @@ python test_phase2_scrapers.py
    playwright install
    ```
 
+5. **Configure environment variables**
+   ```bash
+   cp .env.example .env
+   # Edit .env file with your API keys and credentials
+   ```
+
+## 🔐 Security Configuration
+
+**IMPORTANT**: This project requires API keys for various services. Never commit sensitive credentials to version control.
+
+### Required Environment Variables
+
+Create a `.env` file in the project root with the following variables:
+
+```bash
+# Yelp API Configuration
+YELP_API_KEY=your_yelp_api_key_here
+YELP_CLIENT_ID=your_yelp_client_id_here
+
+# Foursquare API Configuration
+FOURSQUARE_CLIENT_ID=your_foursquare_client_id_here
+FOURSQUARE_CLIENT_SECRET=your_foursquare_client_secret_here
+
+# OpenStreetMap OAuth Configuration
+OSM_CLIENT_ID=your_osm_client_id_here
+OSM_CLIENT_SECRET=your_osm_client_secret_here
+```
+
+### Security Best Practices
+
+- ✅ Use environment variables for all API keys and secrets
+- ✅ Never commit `.env` files to version control
+- ✅ Regularly rotate API keys and credentials
+- ✅ Use least-privilege access for API keys
+- ✅ Monitor API usage for unusual activity
+
+**📋 Security Incident Response**: If you suspect a security breach or exposed credentials, refer to <mcfile name="SECURITY_INCIDENT_RESPONSE.md" path="C:\Users\cliff\Desktop\MenuScraper_Playwright\MenuScraper_Playwright\SECURITY_INCIDENT_RESPONSE.md"></mcfile> for immediate response procedures.
+
 ## 🎯 Quick Start
 
 ### Basic Menu Scraping
