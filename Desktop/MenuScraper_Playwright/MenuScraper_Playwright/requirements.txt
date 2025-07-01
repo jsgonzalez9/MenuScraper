@@ -2,3 +2,5 @@ playwright
 beautifulsoup4
 requests
 playwright
+easyocr
+opencv-python

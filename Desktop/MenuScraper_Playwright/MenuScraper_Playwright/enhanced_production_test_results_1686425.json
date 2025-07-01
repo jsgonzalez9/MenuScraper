@@ -1,0 +1,20 @@
+[
+  {
+    "restaurant": "Alinea Chicago",
+    "website_found": false,
+    "website_url": null,
+    "extraction_result": null
+  },
+  {
+    "restaurant": "Girl & the Goat Chicago",
+    "website_found": false,
+    "website_url": null,
+    "extraction_result": null
+  },
+  {
+    "restaurant": "Au Cheval Chicago",
+    "website_found": false,
+    "website_url": null,
+    "extraction_result": null
+  }
+]

@@ -1,0 +1,28 @@
+{
+  "test_time": "2025-06-30T11:12:16.327164",
+  "proxy_configuration_test": true,
+  "tests_performed": [
+    "Proxy parameter acceptance",
+    "Browser launch with proxy settings",
+    "Navigation with proxy configuration",
+    "Error handling for proxy issues"
+  ],
+  "test_results": [
+    {
+      "test_type": "baseline_no_proxy",
+      "restaurant": "Alinea Chicago",
+      "success": false,
+      "error": "No menu items found",
+      "processing_time": 6.57
+    },
+    {
+      "test_type": "invalid_proxy_test",
+      "restaurant": "Girl & the Goat Chicago",
+      "proxy_used": "http://invalid-proxy:8080",
+      "success": false,
+      "error": "Page.goto: net::ERR_PROXY_CONNECTION_FAILED at https://www.girlandthegoat.com/\nCall log:\n  - navigating to \"https://www.girlandthegoat.com/\", waiting until \"networkidle\"\n",
+      "processing_time": 2.45
+    }
+  ],
+  "proxy_parameter_accepted": true
+}

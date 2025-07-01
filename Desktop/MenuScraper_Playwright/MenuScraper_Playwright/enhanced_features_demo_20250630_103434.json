@@ -1,0 +1,34 @@
+{
+  "demo_time": "2025-06-30T10:34:34.667393",
+  "features_tested": [
+    "OCR Dependencies (EasyOCR, OpenCV)",
+    "Enhanced Website Discovery",
+    "OCR Processing Method",
+    "Direct URL Extraction",
+    "Menu Image Detection"
+  ],
+  "test_results": [
+    {
+      "test_type": "direct_url_extraction",
+      "url": "https://www.alinearestaurant.com",
+      "result": {
+        "url": "https://www.alinearestaurant.com",
+        "success": false,
+        "items": [],
+        "total_items": 0,
+        "processing_time": 33.25,
+        "extraction_method": null,
+        "allergen_summary": {},
+        "price_coverage": 0,
+        "menu_image_urls": [],
+        "ocr_texts": [],
+        "error": "Navigation failed"
+      }
+    }
+  ],
+  "summary": {
+    "ocr_available": true,
+    "enhanced_methods_available": true,
+    "browser_setup_successful": true
+  }
+}

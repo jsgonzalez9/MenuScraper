@@ -1,0 +1,29 @@
+{
+  "test_time": "2025-06-30T11:10:18.093064",
+  "proxy_configuration_test": true,
+  "tests_performed": [
+    "Proxy parameter acceptance",
+    "Browser launch with proxy settings",
+    "Navigation with proxy configuration",
+    "Error handling for proxy issues"
+  ],
+  "test_results": [
+    {
+      "test_type": "baseline_no_proxy",
+      "restaurant": "Alinea Chicago",
+      "success": false,
+      "error": "Exception: 'EnhancedWebsiteMenuScraper' object has no attribute 'scrape_restaurant_menu'",
+      "processing_time": 0
+    },
+    {
+      "test_type": "invalid_proxy_test",
+      "restaurant": "Girl & the Goat Chicago",
+      "proxy_used": "http://invalid-proxy:8080",
+      "success": false,
+      "error": "Exception: EnhancedWebsiteMenuScraper.__init__() got an unexpected keyword argument 'proxy'",
+      "processing_time": 0
+    }
+  ],
+  "proxy_parameter_accepted": false,
+  "proxy_init_error": "EnhancedWebsiteMenuScraper.__init__() got an unexpected keyword argument 'proxy'"
+}

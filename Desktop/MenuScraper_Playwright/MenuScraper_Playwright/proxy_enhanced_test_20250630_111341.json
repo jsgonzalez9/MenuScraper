@@ -1,0 +1,19 @@
+{
+  "test_time": "2025-06-30T11:13:33.127170",
+  "proxy_enhanced_test": true,
+  "proxy_list_provided": false,
+  "proxy_count": 0,
+  "test_results": [
+    {
+      "test_type": "baseline_no_proxy",
+      "restaurant": "Alinea Chicago",
+      "url": "https://www.alinearestaurant.com",
+      "proxy_used": null,
+      "success": false,
+      "total_items": 0,
+      "processing_time": 7.0,
+      "error": "No menu items found",
+      "extraction_method": "website_scraping"
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+[
+  {
+    "restaurant": "Alinea Chicago",
+    "website_found": true,
+    "website_url": "/search?q=Alinea+Chicago+restaurant+official+website&sca_esv=fe8f387389cc6577&udm=50&fbs=AIIjpHxU7SXXniUZfeShr2fp4giZ1Y6MJ25_tmWITc7uy4KIemkjk18Cn72Gp24fGkjjh6yoZyhlDvfYYroN834IkBBoW9T-W8pUltI7zOQsVGtT6W3-fOQqJRRIWvecOfco6Uomryd9fNTXSzVf5jYZhVNPyXjyfFWcHFvBKuZk9bpAkoxfyYoS51lwH2fpJuyxfszt3UO4YxCgREDdhFugGAAZ29Z6pg&aep=1&ntc=1&sa=X&ved=2ahUKEwivhdebu5mOAxUTLtAFHRIcBMoQ2J8OegQIChAC",
+    "extraction_result": {
+      "url": "/search?q=Alinea+Chicago+restaurant+official+website&sca_esv=fe8f387389cc6577&udm=50&fbs=AIIjpHxU7SXXniUZfeShr2fp4giZ1Y6MJ25_tmWITc7uy4KIemkjk18Cn72Gp24fGkjjh6yoZyhlDvfYYroN834IkBBoW9T-W8pUltI7zOQsVGtT6W3-fOQqJRRIWvecOfco6Uomryd9fNTXSzVf5jYZhVNPyXjyfFWcHFvBKuZk9bpAkoxfyYoS51lwH2fpJuyxfszt3UO4YxCgREDdhFugGAAZ29Z6pg&aep=1&ntc=1&sa=X&ved=2ahUKEwivhdebu5mOAxUTLtAFHRIcBMoQ2J8OegQIChAC",
+      "success": false,
+      "items": [],
+      "total_items": 0,
+      "processing_time": 16.08,
+      "extraction_method": null,
+      "allergen_summary": {},
+      "price_coverage": 0,
+      "menu_image_urls": [],
+      "ocr_texts": [],
+      "error": "Navigation failed"
+    }
+  },
+  {
+    "restaurant": "Girl & the Goat Chicago",
+    "website_found": false,
+    "website_url": null,
+    "extraction_result": null
+  },
+  {
+    "restaurant": "Au Cheval Chicago",
+    "website_found": true,
+    "website_url": "/search?q=Au+Cheval+Chicago+restaurant+official+website&sca_esv=fe8f387389cc6577&udm=50&fbs=AIIjpHxU7SXXniUZfeShr2fp4giZ1Y6MJ25_tmWITc7uy4KIemkjk18Cn72Gp24fGkjjh6yoZyhlDvfYYroN834IkBBoW9T-W8pUltI7zOQsVGtT6W3-fOQqJRRIWvecOfco6Uomryd9fNTXSzVf5jYZhVNPyXjyfFWcHFvBKuZk9bpAkoxfyYoS51lwH2fpJuyxfszt3UO4YxCgREDdhFugGAAZ29Z6pg&aep=1&ntc=1&sa=X&ved=2ahUKEwjqzeiou5mOAxX3w8kDHcN2PQoQ2J8OegQIBxAC",
+    "extraction_result": {
+      "url": "/search?q=Au+Cheval+Chicago+restaurant+official+website&sca_esv=fe8f387389cc6577&udm=50&fbs=AIIjpHxU7SXXniUZfeShr2fp4giZ1Y6MJ25_tmWITc7uy4KIemkjk18Cn72Gp24fGkjjh6yoZyhlDvfYYroN834IkBBoW9T-W8pUltI7zOQsVGtT6W3-fOQqJRRIWvecOfco6Uomryd9fNTXSzVf5jYZhVNPyXjyfFWcHFvBKuZk9bpAkoxfyYoS51lwH2fpJuyxfszt3UO4YxCgREDdhFugGAAZ29Z6pg&aep=1&ntc=1&sa=X&ved=2ahUKEwjqzeiou5mOAxX3w8kDHcN2PQoQ2J8OegQIBxAC",
+      "success": false,
+      "items": [],
+      "total_items": 0,
+      "processing_time": 20.27,
+      "extraction_method": null,
+      "allergen_summary": {},
+      "price_coverage": 0,
+      "menu_image_urls": [],
+      "ocr_texts": [],
+      "error": "Navigation failed"
+    }
+  }
+]

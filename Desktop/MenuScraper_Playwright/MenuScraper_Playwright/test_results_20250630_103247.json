@@ -1,0 +1,35 @@
+{
+  "test_time": "2025-06-30T10:32:39.132642",
+  "tests": [
+    {
+      "name": "OCR Dependencies",
+      "status": "pass",
+      "details": {
+        "easyocr": "available",
+        "opencv": "available"
+      }
+    },
+    {
+      "name": "Enhanced Methods",
+      "status": "pass",
+      "details": {
+        "website_discovery": "available",
+        "ocr_processing": "available"
+      }
+    },
+    {
+      "name": "Browser Setup",
+      "status": "pass",
+      "details": {
+        "setup": "success"
+      }
+    },
+    {
+      "name": "Scraper Initialization",
+      "status": "pass",
+      "details": {
+        "initialization": "success"
+      }
+    }
+  ]
+}

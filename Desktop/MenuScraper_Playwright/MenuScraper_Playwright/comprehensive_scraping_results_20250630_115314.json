@@ -1,0 +1,1093 @@
+{
+  "session_info": {
+    "timestamp": "20250630_115314",
+    "total_restaurants": 50,
+    "scrapers_used": [
+      "PracticalMLScraper",
+      "Priority1BalancedScraper",
+      "EnhancedDynamicScraper"
+    ]
+  },
+  "scraper_results": {
+    "PracticalMLScraper": {
+      "successful_scrapes": 0,
+      "total_items": 0,
+      "processing_time": 0.008988618850708008,
+      "restaurant_results": [
+        {
+          "restaurant": "Alinea Chicago",
+          "result": {
+            "success": false,
+            "error": "'PracticalMLScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Girl & the Goat Chicago",
+          "result": {
+            "success": false,
+            "error": "'PracticalMLScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Au Cheval Chicago",
+          "result": {
+            "success": false,
+            "error": "'PracticalMLScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "The Purple Pig Chicago",
+          "result": {
+            "success": false,
+            "error": "'PracticalMLScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Gibsons Bar & Steakhouse Chicago",
+          "result": {
+            "success": false,
+            "error": "'PracticalMLScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Lou Malnati's Pizzeria Chicago",
+          "result": {
+            "success": false,
+            "error": "'PracticalMLScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Portillo's Chicago",
+          "result": {
+            "success": false,
+            "error": "'PracticalMLScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Wildberry Pancakes & Cafe Chicago",
+          "result": {
+            "success": false,
+            "error": "'PracticalMLScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Smoque BBQ Chicago",
+          "result": {
+            "success": false,
+            "error": "'PracticalMLScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Kuma's Corner Chicago",
+          "result": {
+            "success": false,
+            "error": "'PracticalMLScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "The Gage Chicago",
+          "result": {
+            "success": false,
+            "error": "'PracticalMLScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "RPM Italian Chicago",
+          "result": {
+            "success": false,
+            "error": "'PracticalMLScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Bavette's Bar & Boeuf Chicago",
+          "result": {
+            "success": false,
+            "error": "'PracticalMLScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "The Publican Chicago",
+          "result": {
+            "success": false,
+            "error": "'PracticalMLScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Frontera Grill Chicago",
+          "result": {
+            "success": false,
+            "error": "'PracticalMLScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Blackbird Chicago",
+          "result": {
+            "success": false,
+            "error": "'PracticalMLScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Next Restaurant Chicago",
+          "result": {
+            "success": false,
+            "error": "'PracticalMLScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Oriole Chicago",
+          "result": {
+            "success": false,
+            "error": "'PracticalMLScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Boka Chicago",
+          "result": {
+            "success": false,
+            "error": "'PracticalMLScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Topolobampo Chicago",
+          "result": {
+            "success": false,
+            "error": "'PracticalMLScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Pequod's Pizza Chicago",
+          "result": {
+            "success": false,
+            "error": "'PracticalMLScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Chicago Pizza & Oven Grinder Chicago",
+          "result": {
+            "success": false,
+            "error": "'PracticalMLScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Xoco Chicago",
+          "result": {
+            "success": false,
+            "error": "'PracticalMLScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Cafe Spiaggia Chicago",
+          "result": {
+            "success": false,
+            "error": "'PracticalMLScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Everest Chicago",
+          "result": {
+            "success": false,
+            "error": "'PracticalMLScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Maple & Ash Chicago",
+          "result": {
+            "success": false,
+            "error": "'PracticalMLScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Roister Chicago",
+          "result": {
+            "success": false,
+            "error": "'PracticalMLScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Dusek's Chicago",
+          "result": {
+            "success": false,
+            "error": "'PracticalMLScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Longman & Eagle Chicago",
+          "result": {
+            "success": false,
+            "error": "'PracticalMLScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Big Star Chicago",
+          "result": {
+            "success": false,
+            "error": "'PracticalMLScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Hopleaf Chicago",
+          "result": {
+            "success": false,
+            "error": "'PracticalMLScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Revolution Brewing Chicago",
+          "result": {
+            "success": false,
+            "error": "'PracticalMLScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Half Acre Beer Company Chicago",
+          "result": {
+            "success": false,
+            "error": "'PracticalMLScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Goose Island Brewery Chicago",
+          "result": {
+            "success": false,
+            "error": "'PracticalMLScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Lagunitas Brewing Chicago",
+          "result": {
+            "success": false,
+            "error": "'PracticalMLScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Piece Brewery Chicago",
+          "result": {
+            "success": false,
+            "error": "'PracticalMLScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Metropolitan Brewing Chicago",
+          "result": {
+            "success": false,
+            "error": "'PracticalMLScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Off Color Brewing Chicago",
+          "result": {
+            "success": false,
+            "error": "'PracticalMLScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Begyle Brewing Chicago",
+          "result": {
+            "success": false,
+            "error": "'PracticalMLScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Dovetail Brewery Chicago",
+          "result": {
+            "success": false,
+            "error": "'PracticalMLScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Maplewood Brewery Chicago",
+          "result": {
+            "success": false,
+            "error": "'PracticalMLScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Spiteful Brewing Chicago",
+          "result": {
+            "success": false,
+            "error": "'PracticalMLScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Urban Chestnut Brewing Chicago",
+          "result": {
+            "success": false,
+            "error": "'PracticalMLScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Cruz Blanca Brewery Chicago",
+          "result": {
+            "success": false,
+            "error": "'PracticalMLScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Forbidden Root Restaurant Chicago",
+          "result": {
+            "success": false,
+            "error": "'PracticalMLScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Band of Bohemia Chicago",
+          "result": {
+            "success": false,
+            "error": "'PracticalMLScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Haymarket Pub & Brewery Chicago",
+          "result": {
+            "success": false,
+            "error": "'PracticalMLScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Motor Row Brewing Chicago",
+          "result": {
+            "success": false,
+            "error": "'PracticalMLScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Burnt City Brewing Chicago",
+          "result": {
+            "success": false,
+            "error": "'PracticalMLScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Great Central Brewing Chicago",
+          "result": {
+            "success": false,
+            "error": "'PracticalMLScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        }
+      ],
+      "success_rate": 0.0
+    },
+    "Priority1BalancedScraper": {
+      "successful_scrapes": 0,
+      "total_items": 0,
+      "processing_time": 0.008860588073730469,
+      "restaurant_results": [
+        {
+          "restaurant": "Alinea Chicago",
+          "result": {
+            "success": false,
+            "error": "'Priority1BalancedScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Girl & the Goat Chicago",
+          "result": {
+            "success": false,
+            "error": "'Priority1BalancedScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Au Cheval Chicago",
+          "result": {
+            "success": false,
+            "error": "'Priority1BalancedScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "The Purple Pig Chicago",
+          "result": {
+            "success": false,
+            "error": "'Priority1BalancedScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Gibsons Bar & Steakhouse Chicago",
+          "result": {
+            "success": false,
+            "error": "'Priority1BalancedScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Lou Malnati's Pizzeria Chicago",
+          "result": {
+            "success": false,
+            "error": "'Priority1BalancedScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Portillo's Chicago",
+          "result": {
+            "success": false,
+            "error": "'Priority1BalancedScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Wildberry Pancakes & Cafe Chicago",
+          "result": {
+            "success": false,
+            "error": "'Priority1BalancedScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Smoque BBQ Chicago",
+          "result": {
+            "success": false,
+            "error": "'Priority1BalancedScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Kuma's Corner Chicago",
+          "result": {
+            "success": false,
+            "error": "'Priority1BalancedScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "The Gage Chicago",
+          "result": {
+            "success": false,
+            "error": "'Priority1BalancedScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "RPM Italian Chicago",
+          "result": {
+            "success": false,
+            "error": "'Priority1BalancedScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Bavette's Bar & Boeuf Chicago",
+          "result": {
+            "success": false,
+            "error": "'Priority1BalancedScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "The Publican Chicago",
+          "result": {
+            "success": false,
+            "error": "'Priority1BalancedScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Frontera Grill Chicago",
+          "result": {
+            "success": false,
+            "error": "'Priority1BalancedScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Blackbird Chicago",
+          "result": {
+            "success": false,
+            "error": "'Priority1BalancedScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Next Restaurant Chicago",
+          "result": {
+            "success": false,
+            "error": "'Priority1BalancedScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Oriole Chicago",
+          "result": {
+            "success": false,
+            "error": "'Priority1BalancedScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Boka Chicago",
+          "result": {
+            "success": false,
+            "error": "'Priority1BalancedScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Topolobampo Chicago",
+          "result": {
+            "success": false,
+            "error": "'Priority1BalancedScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Pequod's Pizza Chicago",
+          "result": {
+            "success": false,
+            "error": "'Priority1BalancedScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Chicago Pizza & Oven Grinder Chicago",
+          "result": {
+            "success": false,
+            "error": "'Priority1BalancedScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Xoco Chicago",
+          "result": {
+            "success": false,
+            "error": "'Priority1BalancedScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Cafe Spiaggia Chicago",
+          "result": {
+            "success": false,
+            "error": "'Priority1BalancedScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Everest Chicago",
+          "result": {
+            "success": false,
+            "error": "'Priority1BalancedScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Maple & Ash Chicago",
+          "result": {
+            "success": false,
+            "error": "'Priority1BalancedScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Roister Chicago",
+          "result": {
+            "success": false,
+            "error": "'Priority1BalancedScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Dusek's Chicago",
+          "result": {
+            "success": false,
+            "error": "'Priority1BalancedScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Longman & Eagle Chicago",
+          "result": {
+            "success": false,
+            "error": "'Priority1BalancedScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Big Star Chicago",
+          "result": {
+            "success": false,
+            "error": "'Priority1BalancedScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Hopleaf Chicago",
+          "result": {
+            "success": false,
+            "error": "'Priority1BalancedScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Revolution Brewing Chicago",
+          "result": {
+            "success": false,
+            "error": "'Priority1BalancedScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Half Acre Beer Company Chicago",
+          "result": {
+            "success": false,
+            "error": "'Priority1BalancedScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Goose Island Brewery Chicago",
+          "result": {
+            "success": false,
+            "error": "'Priority1BalancedScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Lagunitas Brewing Chicago",
+          "result": {
+            "success": false,
+            "error": "'Priority1BalancedScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Piece Brewery Chicago",
+          "result": {
+            "success": false,
+            "error": "'Priority1BalancedScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Metropolitan Brewing Chicago",
+          "result": {
+            "success": false,
+            "error": "'Priority1BalancedScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Off Color Brewing Chicago",
+          "result": {
+            "success": false,
+            "error": "'Priority1BalancedScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Begyle Brewing Chicago",
+          "result": {
+            "success": false,
+            "error": "'Priority1BalancedScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Dovetail Brewery Chicago",
+          "result": {
+            "success": false,
+            "error": "'Priority1BalancedScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Maplewood Brewery Chicago",
+          "result": {
+            "success": false,
+            "error": "'Priority1BalancedScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Spiteful Brewing Chicago",
+          "result": {
+            "success": false,
+            "error": "'Priority1BalancedScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Urban Chestnut Brewing Chicago",
+          "result": {
+            "success": false,
+            "error": "'Priority1BalancedScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Cruz Blanca Brewery Chicago",
+          "result": {
+            "success": false,
+            "error": "'Priority1BalancedScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Forbidden Root Restaurant Chicago",
+          "result": {
+            "success": false,
+            "error": "'Priority1BalancedScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Band of Bohemia Chicago",
+          "result": {
+            "success": false,
+            "error": "'Priority1BalancedScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Haymarket Pub & Brewery Chicago",
+          "result": {
+            "success": false,
+            "error": "'Priority1BalancedScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Motor Row Brewing Chicago",
+          "result": {
+            "success": false,
+            "error": "'Priority1BalancedScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Burnt City Brewing Chicago",
+          "result": {
+            "success": false,
+            "error": "'Priority1BalancedScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Great Central Brewing Chicago",
+          "result": {
+            "success": false,
+            "error": "'Priority1BalancedScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        }
+      ],
+      "success_rate": 0.0
+    },
+    "EnhancedDynamicScraper": {
+      "successful_scrapes": 0,
+      "total_items": 0,
+      "processing_time": 0.009383678436279297,
+      "restaurant_results": [
+        {
+          "restaurant": "Alinea Chicago",
+          "result": {
+            "success": false,
+            "error": "'EnhancedDynamicScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Girl & the Goat Chicago",
+          "result": {
+            "success": false,
+            "error": "'EnhancedDynamicScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Au Cheval Chicago",
+          "result": {
+            "success": false,
+            "error": "'EnhancedDynamicScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "The Purple Pig Chicago",
+          "result": {
+            "success": false,
+            "error": "'EnhancedDynamicScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Gibsons Bar & Steakhouse Chicago",
+          "result": {
+            "success": false,
+            "error": "'EnhancedDynamicScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Lou Malnati's Pizzeria Chicago",
+          "result": {
+            "success": false,
+            "error": "'EnhancedDynamicScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Portillo's Chicago",
+          "result": {
+            "success": false,
+            "error": "'EnhancedDynamicScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Wildberry Pancakes & Cafe Chicago",
+          "result": {
+            "success": false,
+            "error": "'EnhancedDynamicScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Smoque BBQ Chicago",
+          "result": {
+            "success": false,
+            "error": "'EnhancedDynamicScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Kuma's Corner Chicago",
+          "result": {
+            "success": false,
+            "error": "'EnhancedDynamicScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "The Gage Chicago",
+          "result": {
+            "success": false,
+            "error": "'EnhancedDynamicScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "RPM Italian Chicago",
+          "result": {
+            "success": false,
+            "error": "'EnhancedDynamicScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Bavette's Bar & Boeuf Chicago",
+          "result": {
+            "success": false,
+            "error": "'EnhancedDynamicScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "The Publican Chicago",
+          "result": {
+            "success": false,
+            "error": "'EnhancedDynamicScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Frontera Grill Chicago",
+          "result": {
+            "success": false,
+            "error": "'EnhancedDynamicScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Blackbird Chicago",
+          "result": {
+            "success": false,
+            "error": "'EnhancedDynamicScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Next Restaurant Chicago",
+          "result": {
+            "success": false,
+            "error": "'EnhancedDynamicScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Oriole Chicago",
+          "result": {
+            "success": false,
+            "error": "'EnhancedDynamicScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Boka Chicago",
+          "result": {
+            "success": false,
+            "error": "'EnhancedDynamicScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Topolobampo Chicago",
+          "result": {
+            "success": false,
+            "error": "'EnhancedDynamicScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Pequod's Pizza Chicago",
+          "result": {
+            "success": false,
+            "error": "'EnhancedDynamicScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Chicago Pizza & Oven Grinder Chicago",
+          "result": {
+            "success": false,
+            "error": "'EnhancedDynamicScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Xoco Chicago",
+          "result": {
+            "success": false,
+            "error": "'EnhancedDynamicScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Cafe Spiaggia Chicago",
+          "result": {
+            "success": false,
+            "error": "'EnhancedDynamicScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Everest Chicago",
+          "result": {
+            "success": false,
+            "error": "'EnhancedDynamicScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Maple & Ash Chicago",
+          "result": {
+            "success": false,
+            "error": "'EnhancedDynamicScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Roister Chicago",
+          "result": {
+            "success": false,
+            "error": "'EnhancedDynamicScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Dusek's Chicago",
+          "result": {
+            "success": false,
+            "error": "'EnhancedDynamicScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Longman & Eagle Chicago",
+          "result": {
+            "success": false,
+            "error": "'EnhancedDynamicScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Big Star Chicago",
+          "result": {
+            "success": false,
+            "error": "'EnhancedDynamicScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Hopleaf Chicago",
+          "result": {
+            "success": false,
+            "error": "'EnhancedDynamicScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Revolution Brewing Chicago",
+          "result": {
+            "success": false,
+            "error": "'EnhancedDynamicScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Half Acre Beer Company Chicago",
+          "result": {
+            "success": false,
+            "error": "'EnhancedDynamicScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Goose Island Brewery Chicago",
+          "result": {
+            "success": false,
+            "error": "'EnhancedDynamicScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Lagunitas Brewing Chicago",
+          "result": {
+            "success": false,
+            "error": "'EnhancedDynamicScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Piece Brewery Chicago",
+          "result": {
+            "success": false,
+            "error": "'EnhancedDynamicScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Metropolitan Brewing Chicago",
+          "result": {
+            "success": false,
+            "error": "'EnhancedDynamicScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Off Color Brewing Chicago",
+          "result": {
+            "success": false,
+            "error": "'EnhancedDynamicScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Begyle Brewing Chicago",
+          "result": {
+            "success": false,
+            "error": "'EnhancedDynamicScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Dovetail Brewery Chicago",
+          "result": {
+            "success": false,
+            "error": "'EnhancedDynamicScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Maplewood Brewery Chicago",
+          "result": {
+            "success": false,
+            "error": "'EnhancedDynamicScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Spiteful Brewing Chicago",
+          "result": {
+            "success": false,
+            "error": "'EnhancedDynamicScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Urban Chestnut Brewing Chicago",
+          "result": {
+            "success": false,
+            "error": "'EnhancedDynamicScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Cruz Blanca Brewery Chicago",
+          "result": {
+            "success": false,
+            "error": "'EnhancedDynamicScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Forbidden Root Restaurant Chicago",
+          "result": {
+            "success": false,
+            "error": "'EnhancedDynamicScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Band of Bohemia Chicago",
+          "result": {
+            "success": false,
+            "error": "'EnhancedDynamicScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Haymarket Pub & Brewery Chicago",
+          "result": {
+            "success": false,
+            "error": "'EnhancedDynamicScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Motor Row Brewing Chicago",
+          "result": {
+            "success": false,
+            "error": "'EnhancedDynamicScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Burnt City Brewing Chicago",
+          "result": {
+            "success": false,
+            "error": "'EnhancedDynamicScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        },
+        {
+          "restaurant": "Great Central Brewing Chicago",
+          "result": {
+            "success": false,
+            "error": "'EnhancedDynamicScraper' object has no attribute 'scrape_restaurant_menu'"
+          }
+        }
+      ],
+      "success_rate": 0.0
+    }
+  },
+  "combined_metrics": {
+    "total_successful_extractions": 0,
+    "total_menu_items": 0,
+    "best_performing_scraper": null,
+    "overall_success_rate": 0.0
+  }
+}
